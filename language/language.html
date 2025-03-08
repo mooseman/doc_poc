@@ -1,0 +1,2064 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Zig Language</title>
+  <link rel="stylesheet" href="language_style.css"> 
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <h3>Table of Contents</h3>
+  <!-- Sidebar nav list -->
+  <ul style="list-style-type:none; padding-left: 0;">
+
+    <!-- Introduction -->
+    <li class="level-1"><a href="#introduction">Introduction</a></li>
+    <li class="level-2"><a href="#what-is-zig">What is Zig?</a></li>
+    <li class="level-2"><a href="#key-design-philosophies">Key Design Philosophies</a></li>
+    <li class="level-3"><a href="#minimalism">Minimalism</a></li>
+    <li class="level-3"><a href="#predictability">Predictability</a></li>
+    <li class="level-3"><a href="#explicitness">Explicitness</a></li>
+    <li class="level-3"><a href="#performance">Performance</a></li>
+    <li class="level-2"><a href="#language-versions-roadmap">Language Versions &amp; Roadmap</a></li>
+
+    <!-- Getting Started -->
+    <li class="level-1"><a href="#getting-started">Getting Started</a></li>
+    <li class="level-2"><a href="#installation">Installation</a></li>
+    <li class="level-3"><a href="#downloading-prebuilt-binaries">Downloading Prebuilt Binaries</a></li>
+    <li class="level-3"><a href="#building-zig-from-source">Building Zig from Source</a></li>
+    <li class="level-3"><a href="#verifying-your-installation">Verifying Your Installation</a></li>
+    
+    <li class="level-2"><a href="#hello-world">Hello World</a></li>
+    <li class="level-3"><a href="#zig-run-vs-zig-build-exe">zig run vs. zig build-exe</a></li>
+    <li class="level-3"><a href="#basic-project-structure">Basic Project Structure</a></li>
+
+    <li class="level-2"><a href="#compiler-overview">Compiler Overview</a></li>
+    <li class="level-3"><a href="#llvm-based-compiler">LLVM-based Compiler</a></li>
+    <li class="level-3"><a href="#stage2-self-hosted-compiler">Stage2 (Self-Hosted) Compiler</a></li>
+    <li class="level-3"><a href="#supported-targets-cross-compilation">Supported Targets &amp; Cross-Compilation</a></li>
+
+    <!-- Build Process -->
+    <li class="level-1"><a href="#build-process">Build Process</a></li>
+    <li class="level-2"><a href="#overview-of-zig-build">Overview of zig build</a></li>
+    <li class="level-3"><a href="#why-use-the-zig-build-system">Why Use the Zig Build System?</a></li>
+    <li class="level-3"><a href="#project-layout-and-build-zig-files">Project Layout &amp; build.zig Files</a></li>
+    
+    <li class="level-2"><a href="#the-build-zig-file-in-detail">The build.zig File in Detail</a></li>
+    <li class="level-3"><a href="#declaring-executables">Declaring Executables</a></li>
+    <li class="level-3"><a href="#declaring-libraries-static-shared">Declaring Libraries (Static, Shared)</a></li>
+    <li class="level-3"><a href="#adding-dependencies">Adding Dependencies</a></li>
+    <li class="level-3"><a href="#setting-the-target-triple-architecture-os-abi">Setting the Target Triple (Architecture, OS, ABI)</a></li>
+    <li class="level-3"><a href="#build-modes-debug-releasesafe-releasefast-releasesmall">
+      Build Modes (Debug, ReleaseSafe, ReleaseFast, ReleaseSmall)</a>
+    </li>
+    
+    <li class="level-2"><a href="#command-line-usage">Command-Line Usage</a></li>
+    <li class="level-3"><a href="#zig-build-subcommands-test-run-exe-lib-docs">
+      zig build Subcommands (test, run, exe, lib, docs)</a>
+    </li>
+    <li class="level-3"><a href="#verbosity-logging-and-other-flags">Verbosity, Logging, &amp; Other Flags</a></li>
+    <li class="level-3"><a href="#controlling-compiler-warnings-errors">Controlling Compiler Warnings/Errors</a></li>
+
+    <li class="level-2"><a href="#advanced-build-topics">Advanced Build Topics</a></li>
+    <li class="level-3"><a href="#custom-build-steps">Custom Build Steps (e.g., code generation, resource compilation)</a></li>
+    <li class="level-3"><a href="#cross-compilation-workflows">Cross-Compilation Workflows</a></li>
+    <li class="level-3"><a href="#linking-library-paths-and-system-dependencies">
+      Linking, Library Paths, and System Dependencies</a>
+    </li>
+    <li class="level-3"><a href="#using-external-c-cpp-code">Using External C/C++ Code (.h &amp; .c files, linking libs)</a></li>
+    <li class="level-3"><a href="#caching-and-incremental-builds">Caching and Incremental Builds</a></li>
+    <li class="level-3"><a href="#build-artifacts">Build Artifacts (Output Paths, Intermediate Files)</a></li>
+
+    <li class="level-2"><a href="#scripting-and-tooling">Scripting &amp; Tooling</a></li>
+    <li class="level-3"><a href="#writing-custom-commands-in-build-zig">Writing Custom Commands in build.zig</a></li>
+    <li class="level-3"><a href="#environment-variables-and-configuration">Environment Variables &amp; Configuration</a></li>
+    <li class="level-3"><a href="#packaging-and-distribution">Packaging &amp; Distribution (Prebuilt Binaries, .tar.gz, Docker)</a></li>
+
+    <!-- Language Basics -->
+    <li class="level-1"><a href="#language-basics">Language Basics</a></li>
+    <li class="level-2"><a href="#variables-and-constants">Variables and Constants</a></li>
+    <li class="level-3"><a href="#var-vs-const">var vs. const</a></li>
+    <li class="level-3"><a href="#block-scopes">Block Scopes</a></li>
+    <li class="level-3"><a href="#shadowing">Shadowing</a></li>
+
+    <li class="level-2"><a href="#naming-conventions">Naming Conventions</a></li>
+    <li class="level-3"><a href="#identifiers-and-style">Identifiers &amp; Style</a></li>
+    <li class="level-3"><a href="#module-file-names">Module / File Names</a></li>
+
+    <li class="level-2"><a href="#comments-and-documentation">Comments and Documentation</a></li>
+    <li class="level-3"><a href="#single-and-multi-line-comments">Single-line &amp; Multi-line Comments</a></li>
+    <li class="level-3"><a href="#doc-comments">Doc Comments (///)</a></li>
+
+    <li class="level-2"><a href="#code-organization">Code Organization</a></li>
+    <li class="level-3"><a href="#files-and-modules">Files &amp; Modules</a></li>
+    <li class="level-3"><a href="#package-imports">Package Imports (@import, relative/absolute paths)</a></li>
+
+    <!-- Data Types -->
+    <li class="level-1"><a href="#data-types">Data Types</a></li>
+    <li class="level-2"><a href="#primitive-types">Primitive Types</a></li>
+    <li class="level-3"><a href="#integers">Integers (Signed/Unsigned, Fixed-Width, comptime_int)</a></li>
+    <li class="level-3"><a href="#floating-point">Floating-Point (f16, f32, f64, comptime_float)</a></li>
+    <li class="level-3"><a href="#booleans">Booleans</a></li>
+    <li class="level-3"><a href="#characters">Characters (u8 code points)</a></li>
+
+    <li class="level-2"><a href="#compound-types">Compound Types</a></li>
+    <li class="level-3"><a href="#arrays-and-slices">Arrays &amp; Slices</a></li>
+    <li class="level-3"><a href="#strings">Strings</a></li>
+    <li class="level-3"><a href="#tuples">Tuples</a></li>
+    <li class="level-3"><a href="#structures">Structures (struct)</a></li>
+    <li class="level-3"><a href="#enumerations">Enumerations (enum)</a></li>
+    <li class="level-3"><a href="#unions">Unions</a></li>
+
+    <li class="level-2"><a href="#pointers">Pointers</a></li>
+    <li class="level-3"><a href="#unsafe-vs-safe-pointers">Unsafe vs. Safe Pointers</a></li>
+    <li class="level-3"><a href="#sentinel-terminated-pointers">Sentinel-Terminated Pointers</a></li>
+    <li class="level-3"><a href="#alignment-and-address-spaces">Alignment &amp; Address Spaces</a></li>
+
+    <li class="level-2"><a href="#optionals">Optionals (?T)</a></li>
+    <li class="level-3"><a href="#usage-and-unwrapping">Usage &amp; Unwrapping</a></li>
+    <li class="level-3"><a href="#comparisons-with-null">Comparisons with Null</a></li>
+
+    <li class="level-2"><a href="#error-unions">Error Unions (!T)</a></li>
+    <li class="level-3"><a href="#defining-and-propagating-errors">Defining and Propagating Errors</a></li>
+    <li class="level-3"><a href="#error-sets">Error Sets</a></li>
+    <li class="level-3"><a href="#try-and-catch">try and catch</a></li>
+
+    <!-- Control Flow -->
+    <li class="level-1"><a href="#control-flow">Control Flow</a></li>
+    <li class="level-2"><a href="#if-statements-and-expressions">If Statements &amp; Expressions</a></li>
+    <li class="level-3"><a href="#if-else-syntax">if / else syntax</a></li>
+    <li class="level-3"><a href="#optional-chaining">Optional chaining (if (optional) |value| {...})</a></li>
+    <li class="level-3"><a href="#inline-if-expressions">Inline if-expressions</a></li>
+
+    <li class="level-2"><a href="#while-loops">While Loops</a></li>
+    <li class="level-3"><a href="#basic-while-conditions">Basic while Conditions</a></li>
+    <li class="level-3"><a href="#the-while-condition-item-pattern">while (condition) |item| {...} pattern</a></li>
+    <li class="level-3"><a href="#breaking-early-with-break">Breaking early with break</a></li>
+
+    <li class="level-2"><a href="#for-loops">For Loops</a></li>
+    <li class="level-3"><a href="#iterating-over-collections">Iterating over Arrays, Slices, Ranges</a></li>
+    <li class="level-3"><a href="#index-and-value-variables">Index &amp; Value Variables</a></li>
+
+    <li class="level-2"><a href="#ranges">Ranges</a></li>
+    <li class="level-3"><a href="#numeric-ranges">Numeric Ranges</a></li>
+    <li class="level-3"><a href="#using-ranges-with-for">Using with for</a></li>
+
+    <li class="level-2"><a href="#break-and-continue">Break &amp; Continue</a></li>
+    <li class="level-3"><a href="#breaking-out-of-loops">Breaking out of Loops</a></li>
+    <li class="level-3"><a href="#skipping-iterations">Skipping Iterations</a></li>
+
+    <li class="level-2"><a href="#switch-statements">Switch Statements</a></li>
+    <li class="level-3"><a href="#pattern-matching">Pattern Matching with Enums, Tagged Unions, etc.</a></li>
+    <li class="level-3"><a href="#exhaustive-vs-non-exhaustive-switch">Exhaustive vs. Non-Exhaustive Switch</a></li>
+
+    <!-- Memory Management -->
+    <li class="level-1"><a href="#memory-management">Memory Management</a></li>
+    <li class="level-2"><a href="#allocators">Allocators</a></li>
+    <li class="level-3"><a href="#standard-allocators">Standard Allocators (std.heap.page_allocator, std.heap.ArenaAllocator, ...)</a></li>
+    <li class="level-3"><a href="#creating-custom-allocators">Creating Custom Allocators</a></li>
+    <li class="level-3"><a href="#lifetime-considerations">Lifetime Considerations</a></li>
+
+    <li class="level-2"><a href="#manual-memory-control">Manual Memory Control</a></li>
+    <li class="level-3"><a href="#allocating-arrays-slices-structs">Allocating Arrays, Slices, Structs</a></li>
+    <li class="level-3"><a href="#freeing-and-resizing">Freeing &amp; Resizing</a></li>
+
+    <li class="level-2"><a href="#pointers-and-slices-revisited">Pointers &amp; Slices Revisited</a></li>
+    <li class="level-3"><a href="#pointer-arithmetic">Pointer Arithmetic</a></li>
+    <li class="level-3"><a href="#slicing-arrays">Slicing Arrays</a></li>
+
+    <li class="level-2"><a href="#working-with-zero-cost-abstractions">Working with Zero-Cost Abstractions</a></li>
+    <li class="level-3"><a href="#minimizing-runtime-cost">Minimizing Runtime Cost</a></li>
+    <li class="level-3"><a href="#ensuring-safety">Ensuring Safety</a></li>
+
+    <!-- Error Handling -->
+    <li class="level-1"><a href="#error-handling">Error Handling</a></li>
+    <li class="level-2"><a href="#declaring-errors">Declaring Errors</a></li>
+    <li class="level-3"><a href="#error-literals">error{SomeError, AnotherError}, error.UnexpectedEOF</a></li>
+
+    <li class="level-2"><a href="#error-propagation">Error Propagation</a></li>
+    <li class="level-3"><a href="#using-try-and-catch">Using try/catch</a></li>
+    <li class="level-3"><a href="#error-unions-notation">Error Unions (!T)</a></li>
+    <li class="level-3"><a href="#return-error">return error.SomethingBad</a></li>
+
+    <li class="level-2"><a href="#handling-errors">Handling Errors</a></li>
+    <li class="level-3"><a href="#pattern-matching-with-switch">Pattern Matching with switch</a></li>
+    <li class="level-3"><a href="#using-catch-err">Using catch |err| {...}</a></li>
+
+    <li class="level-2"><a href="#defer-and-cleanup">Defer &amp; Cleanup</a></li>
+    <li class="level-3"><a href="#defer-statements">defer statements for resource cleanup</a></li>
+    <li class="level-3"><a href="#error-safe-resource-management">Error-Safe Resource Management</a></li>
+
+    <!-- Compile-Time Features -->
+    <li class="level-1"><a href="#compile-time-features">Compile-Time Features</a></li>
+    <li class="level-2"><a href="#comptime-keyword">comptime Keyword</a></li>
+    <li class="level-3"><a href="#compile-time-conditionals">Compile-Time Conditionals</a></li>
+    <li class="level-3"><a href="#compile-time-loops">Compile-Time Loops</a></li>
+
+    <li class="level-2"><a href="#compile-time-functions">Compile-Time Functions</a></li>
+    <li class="level-3"><a href="#fn-foo-comptime">fn foo(comptime x: T) ...</a></li>
+    <li class="level-3"><a href="#evaluating-functions-at-compile-time">Evaluating Functions at Compile Time</a></li>
+
+    <li class="level-2"><a href="#reflection-and-metaprogramming">Reflection &amp; Metaprogramming</a></li>
+    <li class="level-3"><a href="#typeinfo-typename-field">(@typeInfo, @typeName, @field)</a></li>
+    <li class="level-3"><a href="#generics-and-parameterized-code">Generics / Parameterized Code</a></li>
+
+    <li class="level-2"><a href="#inline-assembly">Inline Assembly</a></li>
+    <li class="level-3"><a href="#asm-syntax">Syntax, supported instructions</a></li>
+    <li class="level-3"><a href="#asm-safety-constraints">Safety &amp; Constraints</a></li>
+
+    <!-- Concurrency & Asynchronous I/O -->
+    <li class="level-1"><a href="#concurrency-and-async-io">Concurrency &amp; Asynchronous I/O</a></li>
+    <li class="level-2"><a href="#async-functions">Async Functions</a></li>
+    <li class="level-3"><a href="#async-fn-basics">async fn basics</a></li>
+    <li class="level-3"><a href="#await-usage">await usage</a></li>
+
+    <li class="level-2"><a href="#suspend-and-resume">Suspend &amp; Resume</a></li>
+    <li class="level-3"><a href="#cooperative-concurrency">Cooperative Concurrency</a></li>
+    <li class="level-3"><a href="#event-loop-integration">Event Loop Integration</a></li>
+
+    <li class="level-2"><a href="#channel-and-queue-abstractions">Channel &amp; Queue Abstractions</a></li>
+    <li class="level-3"><a href="#passing-data-between-tasks">Passing Data Between Tasks</a></li>
+    <li class="level-3"><a href="#std-channel">std.Channel (if available in your Zig version)</a></li>
+
+    <li class="level-2"><a href="#async-network-operations">Example: Asynchronous Network Operations</a></li>
+
+    <!-- Standard Library Essentials -->
+    <li class="level-1"><a href="#standard-library-essentials">Standard Library Essentials</a></li>
+    <li class="level-2"><a href="#overview-of-std">Overview of std</a></li>
+    <li class="level-3"><a href="#modules-and-imports">Modules &amp; How to Import</a></li>
+
+    <li class="level-2"><a href="#common-modules">Common Modules</a></li>
+    <li class="level-3"><a href="#std-math">std.math (math functions)</a></li>
+    <li class="level-3"><a href="#std-fs">std.fs (file system handling)</a></li>
+    <li class="level-3"><a href="#std-mem">std.mem (memory utilities)</a></li>
+    <li class="level-3"><a href="#std-testing">std.testing (testing utilities)</a></li>
+    <li class="level-3"><a href="#std-time">std.time (time utilities)</a></li>
+
+    <li class="level-2"><a href="#data-structures-in-std">Data Structures in std</a></li>
+    <li class="level-3"><a href="#arraylist-arrayhashmap-linkedlist-etc">ArrayList, ArrayHashMap, LinkedList, etc.</a></li>
+    <li class="level-3"><a href="#usage-examples-and-allocation">Usage Examples &amp; Memory Allocation</a></li>
+
+    <li class="level-2"><a href="#utilities-and-helpers">Utilities &amp; Helpers</a></li>
+    <li class="level-3"><a href="#std-debug">std.debug (logging, printing)</a></li>
+    <li class="level-3"><a href="#std-os">std.os (operating system calls)</a></li>
+    <li class="level-3"><a href="#std-process">std.process (launching processes)</a></li>
+
+    <!-- Interfacing with C/C++ -->
+    <li class="level-1"><a href="#interfacing-with-c-cpp">Interfacing with C/C++</a></li>
+    <li class="level-2"><a href="#c-headers-and-ffi">@cImport and @cInclude</a></li>
+    <li class="level-3"><a href="#linking-against-system-libraries">Linking against system libraries</a></li>
+
+    <li class="level-2"><a href="#calling-zig-from-c">Calling Zig from C</a></li>
+    <li class="level-3"><a href="#generating-header-files-with-translate-c">Generating .h files with zig translate-c</a></li>
+
+    <li class="level-2"><a href="#mixed-projects">Mixed Projects</a></li>
+    <li class="level-3"><a href="#organizing-zig-plus-cc-code">Organizing Zig + C/C++ code</a></li>
+    <li class="level-3"><a href="#build-system-integration">Build System Integration</a></li>
+
+    <!-- Testing & Debugging -->
+    <li class="level-1"><a href="#testing-and-debugging">Testing &amp; Debugging</a></li>
+    <li class="level-2"><a href="#test-declarations">Test Declarations</a></li>
+    <li class="level-3"><a href="#test-description-block">test "description" {...}</a></li>
+    <li class="level-3"><a href="#running-tests-with-zig-test">Running Tests with zig test</a></li>
+
+    <li class="level-2"><a href="#test-organization">Test Organization</a></li>
+    <li class="level-3"><a href="#multiple-test-files">Multiple Test Files, Modules</a></li>
+    <li class="level-3"><a href="#using-std-testing-assertions">Using std.testing Assertions</a></li>
+
+    <li class="level-2"><a href="#debugging">Debugging</a></li>
+    <li class="level-3"><a href="#compiler-flags">Compiler Flags (-femit-llvm-ir, -fno-strip)</a></li>
+    <li class="level-3"><a href="#using-lldb-or-gdb">Using LLDB or GDB</a></li>
+    <li class="level-3"><a href="#print-debugging-with-stddebugprint">Print Debugging with std.debug.print</a></li>
+
+    <!-- Deployment & Distribution -->
+    <li class="level-1"><a href="#deployment-and-distribution">Deployment &amp; Distribution</a></li>
+    <li class="level-2"><a href="#cross-compilation-in-depth">Cross-Compilation in Depth</a></li>
+    <li class="level-3"><a href="#specifying-target">Specifying --target (CPU, OS, ABI)</a></li>
+    <li class="level-3"><a href="#building-static-vs-shared-libraries">Building Static vs. Shared Libraries</a></li>
+    <li class="level-3"><a href="#packaging-for-multiple-platforms">Packaging for Multiple Platforms</a></li>
+
+    <li class="level-2"><a href="#optimization-modes">Optimization Modes</a></li>
+    <li class="level-3"><a href="#debug">Debug</a></li>
+    <li class="level-3"><a href="#releasesafe">ReleaseSafe</a></li>
+    <li class="level-3"><a href="#releasefast">ReleaseFast</a></li>
+    <li class="level-3"><a href="#releasesmall">ReleaseSmall</a></li>
+
+    <li class="level-2"><a href="#stripping-symbols-and-minimizing-binary-size">
+      Stripping Symbols &amp; Minimizing Binary Size</a>
+    </li>
+    <li class="level-2"><a href="#reproducible-builds">Reproducible Builds</a></li>
+
+    <!-- Advanced Topics -->
+    <li class="level-1"><a href="#advanced-topics">Advanced Topics</a></li>
+    <li class="level-2"><a href="#using-zig-as-a-linker">Using Zig as a Linker</a></li>
+    <li class="level-3"><a href="#zig-cc-zig-cpp-commands">zig cc, zig c++ commands</a></li>
+    <li class="level-3"><a href="#wrapping-external-toolchains">Wrapping External Toolchains</a></li>
+
+    <li class="level-2"><a href="#generic-programming">Generic Programming</a></li>
+    <li class="level-3"><a href="#type-parameters">Type Parameters</a></li>
+    <li class="level-3"><a href="#comptime-techniques">comptime techniques</a></li>
+
+    <li class="level-2"><a href="#bit-manipulation">Bit Manipulation</a></li>
+    <li class="level-3"><a href="#packed-structs-bitfields-endianness">Packed Structs, Bitfields, Endianness</a></li>
+
+    <li class="level-2"><a href="#inline-functions-and-builtins">Inline Functions &amp; Builtins</a></li>
+    <li class="level-3"><a href="#builtin-functions">@import, @sizeOf, @alignOf, @offsetof, etc.</a></li>
+
+    <li class="level-2"><a href="#performance-tuning">Performance Tuning</a></li>
+    <li class="level-3"><a href="#measuring-performance">Measuring Performance</a></li>
+    <li class="level-3"><a href="#profiling-tools">Profiling (perf, instruments)</a></li>
+    <li class="level-3"><a href="#allocation-patterns">Allocation Patterns</a></li>
+
+    <!-- Tooling Overview -->
+    <li class="level-1"><a href="#tooling-overview">Tooling Overview</a></li>
+    <li class="level-2"><a href="#zig-fmt">zig fmt (Formatter)</a></li>
+    <li class="level-2"><a href="#zig-translate-c">zig translate-c (C to Zig)</a></li>
+    <li class="level-2"><a href="#zig-ast-check">zig ast-check (Syntax &amp; Semantic Checks)</a></li>
+    <li class="level-2"><a href="#zig-targets">zig targets (List Supported Targets)</a></li>
+    <li class="level-2"><a href="#zig-env">zig env (Environment Info)</a></li>
+
+    <!-- Documentation Generation -->
+    <li class="level-1"><a href="#documentation-generation">Documentation Generation</a></li>
+    <li class="level-2"><a href="#using-zig-build-docs">Using zig build docs</a></li>
+    <li class="level-3"><a href="#generating-html">Generating HTML</a></li>
+    <li class="level-3"><a href="#configuring-output-location">Configuring Output Location</a></li>
+
+    <li class="level-2"><a href="#embedding-comments-and-examples">Embedding Comments &amp; Examples</a></li>
+    <li class="level-3"><a href="#best-practices-for-doc-comments">Best Practices for Doc Comments</a></li>
+
+    <li class="level-2"><a href="#linking-to-std-lib-docs">Linking to Standard Library Docs</a></li>
+
+    <!-- Best Practices & Conventions -->
+    <li class="level-1"><a href="#best-practices-and-conventions">Best Practices &amp; Conventions</a></li>
+    <li class="level-2"><a href="#coding-style">Coding Style</a></li>
+    <li class="level-3"><a href="#naming-formatting-module-layout">Naming, Formatting, Module Layout</a></li>
+    
+    <li class="level-2"><a href="#memory-safety-and-lifetime-management">Memory Safety &amp; Lifetime Management</a></li>
+    <li class="level-2"><a href="#error-handling-conventions">Error Handling Conventions</a></li>
+    <li class="level-2"><a href="#testing-and-continuous-integration">Testing &amp; Continuous Integration</a></li>
+
+    <li class="level-2"><a href="#contributing-to-zig">Contributing to Zig</a></li>
+    <li class="level-3"><a href="#reporting-issues">Reporting Issues</a></li>
+    <li class="level-3"><a href="#opening-pull-requests">Opening Pull Requests</a></li>
+    <li class="level-3"><a href="#community-resources">Community Resources (Discord, GitHub Discussions)</a></li>
+
+    <!-- Further Reading & Resources -->
+    <li class="level-1"><a href="#further-reading-and-resources">Further Reading &amp; Resources</a></li>
+    <li class="level-2"><a href="#official-zig-language-reference">Official Zig Language Reference</a></li>
+    <li class="level-2"><a href="#zig-community-projects-and-packages">Zig Community Projects &amp; Packages</a></li>
+    <li class="level-2"><a href="#external-tutorials-and-guides">External Tutorials &amp; Guides</a></li>
+    <li class="level-2"><a href="#language-internals">Language Internals (Compiler Architecture, IR)</a></li>
+  </ul>
+</div>
+
+
+<!-- TOGGLE BAR -->
+<div id="toggle-bar">
+  <span id="toggle-symbol"><</span>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- Top Nav Bar -->
+  <div class="top-nav">
+
+    <!-- Left side: Nav Buttons -->
+    <div class="nav-buttons">
+      <!-- "Zig Language" is grayed out or 'current' because we are on this page -->
+      <button class="nav-button current" type="button">Zig Language</button>
+
+      <!-- "Standard Library" leads to stdlib.html -->
+      <button class="nav-button" type="button" onclick="window.location.href='../stdlib/stdlib.html'">
+        Zig Standard Library
+      </button>
+
+      <!-- "Examples" leads to examples.html -->
+      <button class="nav-button" type="button" onclick="window.location.href='../examples/examples.html'">
+        Zig Examples
+      </button>
+    </div>  <!-- end Nav buttons  -->
+
+    <!-- Right side: Theme Selector -->
+    <div class="style-selector-container">
+      <label for="theme-switcher">Theme:</label>
+      <select id="theme-switcher">
+        <option value="serene_blues">Serene Blues</option>
+        <option value="muted_greens">Muted Greens</option>
+        <option value="soft_earth_tones">Soft Earth Tones</option>
+        <option value="modern_grayscale">Modern Grayscale</option>
+        <option value="lemon_daydream">Lemon Daydream</option>
+        <option value="lilac_mist">Lilac Mist</option>
+        <option value="apricot_sunset">Apricot Sunset</option>
+        <option value="neon_noir">Neon Noir</option>
+        <option value="police_mode">PULL OVER, BUDDY!</option>
+      </select>
+    </div>
+  </div><!-- end .top-nav -->
+
+
+  <!-- ########################################################## -->
+  <!--  Text for "main content" goes here.  --> 
+  <!-- ########################################################## -->  
+
+  <!-- BEGIN SINGLE LONG PAGE ZIG DOCUMENTATION -->
+
+<!-- 
+  Place all of this inside your existing <div id="main"> ... </div> 
+  to replace or augment the current content. 
+  These IDs match those in your sidebar, so the links will work.
+-->
+
+<!-- 
+  LEVEL-1: Introduction
+-->
+<h1 id="introduction">Introduction</h1>
+<p>
+  Zig is a general-purpose programming language and toolchain for maintaining robust, optimal, and reusable software. It focuses on providing a modern alternative to C while preserving the manual control and explicitness that systems programming often requires. 
+</p>
+<p>
+  In this documentation, you'll learn about Zig's fundamentals, its build system, memory management model, error handling, compile-time features, and more. This single document aims to serve as a comprehensive reference for getting started and diving deeper into Zig.
+</p>
+
+<!-- LEVEL-2: What is Zig? -->
+<h2 id="what-is-zig">What is Zig?</h2>
+<p>
+  Zig is a relatively new systems programming language that emphasizes clarity, performance, and simplicity. It provides:
+</p>
+<ul>
+  <li>A robust standard library for common tasks and data structures.</li>
+  <li>Manual memory management with the help of “allocators,” offering control akin to C/C++.</li>
+  <li>Powerful compile-time features (using <code>comptime</code>) for metaprogramming and code generation.</li>
+  <li>Cross-compilation support built into its toolchain.</li>
+</ul>
+
+<!-- LEVEL-2: Key Design Philosophies -->
+<h2 id="key-design-philosophies">Key Design Philosophies</h2>
+
+  <!-- LEVEL-3: Minimalism -->
+  <h3 id="minimalism">Minimalism</h3>
+  <p>
+    Zig aims to keep the language core small and coherent, minimizing “magic” in the language. 
+    Features are added deliberately, ensuring a cohesive design that avoids unnecessary complexity.
+  </p>
+
+  <!-- LEVEL-3: Predictability -->
+  <h3 id="predictability">Predictability</h3>
+  <p>
+    The language strives for transparent behavior and direct mapping to machine code. 
+    Developers should be able to anticipate how code translates to lower-level operations.
+  </p>
+
+  <!-- LEVEL-3: Explicitness -->
+  <h3 id="explicitness">Explicitness</h3>
+  <p>
+    Zig reduces hidden behavior and prioritizes code that is obvious in intent. This means:
+    <ul>
+      <li>No hidden control flows (e.g., RAII destructors, exceptions) that complicate program logic.</li>
+      <li>Use of <code>try</code> and error unions for error handling, rather than throwing exceptions.</li>
+      <li>Allocations, type coercions, and other “costly” operations are clearly visible.</li>
+    </ul>
+  </p>
+
+  <!-- LEVEL-3: Performance -->
+  <h3 id="performance">Performance</h3>
+  <p>
+    Zig’s design ensures high performance, often comparable to or better than C, thanks to:
+    <ul>
+      <li>Direct memory access and control.</li>
+      <li>Low-level features like inline assembly and manual allocator usage.</li>
+      <li>Compile-time code generation to remove overhead and reduce runtime checks in release modes.</li>
+    </ul>
+  </p>
+
+<!-- LEVEL-2: Language Versions & Roadmap -->
+<h2 id="language-versions-roadmap">Language Versions &amp; Roadmap</h2>
+<p>
+  Zig is still evolving. The compiler is under active development, with frequent releases that add new features and improvements. 
+  Keep an eye on official release notes and the roadmap in the <a href="https://ziglang.org">Zig project website</a> for the latest updates.
+</p>
+
+<!-- 
+  LEVEL-1: Getting Started
+-->
+<h1 id="getting-started">Getting Started</h1>
+
+<!-- LEVEL-2: Installation -->
+<h2 id="installation">Installation</h2>
+<p>
+  You can install Zig via prebuilt binaries or build from source. Both options allow you to quickly get started using the <code>zig</code> compiler and toolchain.
+</p>
+
+  <!-- LEVEL-3: Downloading Prebuilt Binaries -->
+  <h3 id="downloading-prebuilt-binaries">Downloading Prebuilt Binaries</h3>
+  <p>
+    The easiest way to start is to download a prebuilt binary for your operating system from 
+    <a href="https://ziglang.org/download/">ziglang.org/download</a>. 
+    Extract the archive and place the <code>zig</code> executable in your PATH.
+  </p>
+
+  <!-- LEVEL-3: Building Zig from Source -->
+  <h3 id="building-zig-from-source">Building Zig from Source</h3>
+  <p>
+    To build Zig from source:
+  </p>
+  <ol>
+    <li>Clone the <code>zig</code> repository from GitHub.</li>
+    <li>Ensure you have CMake, LLVM, and other dependencies installed.</li>
+    <li>Run <code>cmake</code> or the provided build scripts to compile Zig.</li>
+  </ol>
+
+  <!-- LEVEL-3: Verifying Your Installation -->
+  <h3 id="verifying-your-installation">Verifying Your Installation</h3>
+  <p>
+    Once installed, run <code>zig version</code> from a terminal to confirm that Zig is available 
+    and to see which version you have installed.
+  </p>
+
+<!-- LEVEL-2: Hello World -->
+<h2 id="hello-world">Hello World</h2>
+<p>
+  A simple “Hello World” example demonstrates Zig’s core workflow.
+</p>
+
+  <!-- LEVEL-3: zig run vs. zig build-exe -->
+  <h3 id="zig-run-vs-zig-build-exe">zig run vs. zig build-exe</h3>
+  <p>
+    Zig provides two common ways to compile and run your code:
+  </p>
+  <ul>
+    <li><code>zig run main.zig</code>: Compiles your code to an in-memory binary and runs it immediately.</li>
+    <li><code>zig build-exe main.zig</code>: Generates a standalone executable (<code>./main</code>) you can run later.</li>
+  </ul>
+
+  <!-- LEVEL-3: Basic Project Structure -->
+  <h3 id="basic-project-structure">Basic Project Structure</h3>
+  <p>
+    Many Zig projects follow a simple structure:
+  </p>
+  <pre><code>.
+├── src
+│   └── main.zig
+└── build.zig
+</code></pre>
+  <p>
+    Your main Zig code goes in <code>src/main.zig</code>, and <code>build.zig</code> configures how 
+    the project is built and tested using the Zig build system.
+  </p>
+
+<!-- LEVEL-2: Compiler Overview -->
+<h2 id="compiler-overview">Compiler Overview</h2>
+<p>
+  The Zig compiler is a powerful, LLVM-based tool that can target many platforms. 
+  It also features a self-hosted backend under active development (stage2).
+</p>
+
+  <!-- LEVEL-3: LLVM-based Compiler -->
+  <h3 id="llvm-based-compiler">LLVM-based Compiler</h3>
+  <p>
+    The stable version of Zig uses LLVM to generate optimized machine code for various architectures. 
+    LLVM provides advanced optimizations and leverages the Clang/LLVM infrastructure for code generation.
+  </p>
+
+  <!-- LEVEL-3: Stage2 (Self-Hosted) Compiler -->
+  <h3 id="stage2-self-hosted-compiler">Stage2 (Self-Hosted) Compiler</h3>
+  <p>
+    Zig is in the process of building a self-hosted compiler, known as “stage2.” 
+    This will remove the external LLVM dependency and streamline Zig’s toolchain, 
+    potentially improving cross-compilation performance and integration.
+  </p>
+
+  <!-- LEVEL-3: Supported Targets & Cross-Compilation -->
+  <h3 id="supported-targets-cross-compilation">Supported Targets &amp; Cross-Compilation</h3>
+  <p>
+    Zig supports cross-compiling out of the box. You can specify <code>--target</code> (CPU architecture, OS, ABI) 
+    to build programs for Windows, macOS, Linux, and many other environments, from any host platform.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Build Process
+-->
+<h1 id="build-process">Build Process</h1>
+
+<!-- LEVEL-2: Overview of zig build -->
+<h2 id="overview-of-zig-build">Overview of zig build</h2>
+<p>
+  The <code>zig build</code> system offers a declarative approach to building your project. 
+  It uses <code>build.zig</code> scripts to define various targets (executables, libraries, tests) and 
+  handles dependencies, build modes, and more.
+</p>
+
+  <!-- LEVEL-3: Why Use the Zig Build System? -->
+  <h3 id="why-use-the-zig-build-system">Why Use the Zig Build System?</h3>
+  <ul>
+    <li>Built-in cross-compilation.</li>
+    <li>Consistent interface across OSes.</li>
+    <li>Easy integration of external packages.</li>
+    <li>Compile-time reflection of build parameters.</li>
+  </ul>
+
+  <!-- LEVEL-3: Project Layout & build.zig Files -->
+  <h3 id="project-layout-and-build-zig-files">Project Layout &amp; build.zig Files</h3>
+  <p>
+    By convention, a <code>build.zig</code> at the root directory defines your project’s build steps. 
+    You can configure executables, libraries, and tests. The build system can also handle custom commands and scripts.
+  </p>
+
+<!-- LEVEL-2: The build.zig File in Detail -->
+<h2 id="the-build-zig-file-in-detail">The build.zig File in Detail</h2>
+<p>
+  The <code>build.zig</code> file is a Zig program used to create build steps using the 
+  <code>std.build</code> API. Common tasks include adding executables, libraries, setting build modes, and linking dependencies.
+</p>
+
+  <!-- LEVEL-3: Declaring Executables -->
+  <h3 id="declaring-executables">Declaring Executables</h3>
+  <p>
+    A typical pattern:
+  </p>
+  <pre><code>const std = @import("std");
+
+pub fn build(b: *std.build.Builder) void {
+    const exe = b.addExecutable("myapp", "src/main.zig");
+    exe.setTargetMachine(.native);
+    exe.install();
+}
+</code></pre>
+
+  <!-- LEVEL-3: Declaring Libraries (Static, Shared) -->
+  <h3 id="declaring-libraries-static-shared">Declaring Libraries (Static, Shared)</h3>
+  <p>
+    You can create static or shared libraries similarly:
+  </p>
+  <pre><code>const lib = b.addStaticLibrary("mylib", "src/lib.zig");
+// or
+const dynlib = b.addSharedLibrary("mylib", "src/lib.zig");
+</code></pre>
+
+  <!-- LEVEL-3: Adding Dependencies -->
+  <h3 id="adding-dependencies">Adding Dependencies</h3>
+  <p>
+    For external Zig packages or C libraries, you can specify additional include paths or link settings:
+  </p>
+  <pre><code>exe.addIncludePath("path/to/headers");
+exe.linkSystemLibrary("ssl");</code></pre>
+
+  <!-- LEVEL-3: Setting the Target Triple (Architecture, OS, ABI) -->
+  <h3 id="setting-the-target-triple-architecture-os-abi">Setting the Target Triple (Architecture, OS, ABI)</h3>
+  <p>
+    Use <code>exe.setTargetMachine</code> or <code>exe.setTargetTriple</code> to specify cross-compilation targets. 
+    For example:
+  </p>
+  <pre><code>exe.setTargetTriple("x86_64-windows-gnu");</code></pre>
+
+  <!-- LEVEL-3: Build Modes (Debug, ReleaseSafe, ReleaseFast, ReleaseSmall) -->
+  <h3 id="build-modes-debug-releasesafe-releasefast-releasesmall">
+    Build Modes (Debug, ReleaseSafe, ReleaseFast, ReleaseSmall)
+  </h3>
+  <p>
+    Zig supports different optimization and safety trade-offs:
+  </p>
+  <ul>
+    <li><strong>Debug</strong>: No optimizations, full safety checks.</li>
+    <li><strong>ReleaseSafe</strong>: Optimized with safety checks.</li>
+    <li><strong>ReleaseFast</strong>: Maximum performance, fewer checks.</li>
+    <li><strong>ReleaseSmall</strong>: Optimize for binary size.</li>
+  </ul>
+
+<!-- LEVEL-2: Command-Line Usage -->
+<h2 id="command-line-usage">Command-Line Usage</h2>
+<p>
+  The <code>zig build</code> command can accept subcommands and flags for testing, building executables, generating libraries, or documentation.
+</p>
+
+  <!-- LEVEL-3: zig build Subcommands (test, run, exe, lib, docs) -->
+  <h3 id="zig-build-subcommands-test-run-exe-lib-docs">
+    zig build Subcommands (test, run, exe, lib, docs)
+  </h3>
+  <p>
+    <ul>
+      <li><code>zig build test</code>: Build and run tests defined in your project.</li>
+      <li><code>zig build run</code>: Build and immediately run the default executable.</li>
+      <li><code>zig build exe</code>: Produce an executable target.</li>
+      <li><code>zig build lib</code>: Produce a library (static or shared).</li>
+      <li><code>zig build docs</code>: Generate documentation for your code.</li>
+    </ul>
+  </p>
+
+  <!-- LEVEL-3: Verbosity, Logging, & Other Flags -->
+  <h3 id="verbosity-logging-and-other-flags">Verbosity, Logging, &amp; Other Flags</h3>
+  <p>
+    Use <code>--verbose</code> to see more output while building. 
+    You can also pass custom flags (e.g., <code>--zig-arg=-fsanitize=address</code>) for specialized builds.
+  </p>
+
+  <!-- LEVEL-3: Controlling Compiler Warnings/Errors -->
+  <h3 id="controlling-compiler-warnings-errors">Controlling Compiler Warnings/Errors</h3>
+  <p>
+    Zig’s philosophy is that warnings are errors. You can control optional checks with 
+    flags like <code>-fno-emit-bin</code> or specialized features. 
+    Generally, Zig tries to provide explicit errors rather than silent warnings.
+  </p>
+
+<!-- LEVEL-2: Advanced Build Topics -->
+<h2 id="advanced-build-topics">Advanced Build Topics</h2>
+
+  <!-- LEVEL-3: Custom Build Steps (e.g., code generation, resource compilation) -->
+  <h3 id="custom-build-steps">Custom Build Steps (e.g., code generation, resource compilation)</h3>
+  <p>
+    You can define custom commands in <code>build.zig</code> using the <code>builder.exec</code> API. 
+    This is useful for running code generators or external tools as part of the build pipeline.
+  </p>
+
+  <!-- LEVEL-3: Cross-Compilation Workflows -->
+  <h3 id="cross-compilation-workflows">Cross-Compilation Workflows</h3>
+  <p>
+    Zig excels at cross-compilation. Ensure you set the target triple, link libraries for that target if needed, 
+    and optionally specify sysroot paths. This makes building Windows binaries on Linux (or vice versa) straightforward.
+  </p>
+
+  <!-- LEVEL-3: Linking, Library Paths, and System Dependencies -->
+  <h3 id="linking-library-paths-and-system-dependencies">
+    Linking, Library Paths, and System Dependencies
+  </h3>
+  <p>
+    When linking against external libraries, you might need to specify library paths 
+    (<code>exe.addLibPath("...")</code>) or link system libraries (<code>exe.linkSystemLibrary("foo")</code>).
+    Provide additional linker flags as needed with <code>exe.addLinkFlag()</code>.
+  </p>
+
+  <!-- LEVEL-3: Using External C/C++ Code (.h & .c files, linking libs) -->
+  <h3 id="using-external-c-cpp-code">Using External C/C++ Code (.h &amp; .c files, linking libs)</h3>
+  <p>
+    You can incorporate C/C++ code by adding <code>@cImport</code> in your Zig files to include C headers, 
+    or linking object files and libraries through the build API. 
+    Zig’s built-in <code>translate-c</code> can also help convert headers to Zig.
+  </p>
+
+  <!-- LEVEL-3: Caching and Incremental Builds -->
+  <h3 id="caching-and-incremental-builds">Caching and Incremental Builds</h3>
+  <p>
+    The Zig build system keeps a build cache, allowing faster incremental rebuilds. 
+    You can clear caches with <code>zig build clean</code>.
+  </p>
+
+  <!-- LEVEL-3: Build Artifacts (Output Paths, Intermediate Files) -->
+  <h3 id="build-artifacts">Build Artifacts (Output Paths, Intermediate Files)</h3>
+  <p>
+    By default, <code>zig build</code> places outputs in <code>zig-out/</code>. 
+    You can customize the artifact directory or intermediate build directories by adjusting the builder’s configuration in <code>build.zig</code>.
+  </p>
+
+<!-- LEVEL-2: Scripting & Tooling -->
+<h2 id="scripting-and-tooling">Scripting &amp; Tooling</h2>
+
+  <!-- LEVEL-3: Writing Custom Commands in build.zig -->
+  <h3 id="writing-custom-commands-in-build-zig">Writing Custom Commands in build.zig</h3>
+  <p>
+    Use <code>const cmd = b.addSystemCommand(...)</code> or <code>builder.exec()</code> to run shell commands. 
+    You can wire these commands to your default build or define them as separate steps (e.g., <code>zig build generate</code>).
+  </p>
+
+  <!-- LEVEL-3: Environment Variables & Configuration -->
+  <h3 id="environment-variables-and-configuration">Environment Variables &amp; Configuration</h3>
+  <p>
+    You can pass environment variables to build scripts (e.g., <code>std.os.getenv("MY_ENV")</code>) 
+    to configure which features are built. This can be used to toggle optional modules or set API keys.
+  </p>
+
+  <!-- LEVEL-3: Packaging & Distribution (Prebuilt Binaries, .tar.gz, Docker) -->
+  <h3 id="packaging-and-distribution">Packaging &amp; Distribution (Prebuilt Binaries, .tar.gz, Docker)</h3>
+  <p>
+    Once you have an executable, you can package it in a tarball or container. 
+    Because Zig’s runtime is minimal, distributing a single binary is often enough. 
+    For Docker, copy the Zig binary into a minimal base image (e.g., Alpine) for a small final image.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Language Basics
+-->
+<h1 id="language-basics">Language Basics</h1>
+
+<!-- LEVEL-2: Variables and Constants -->
+<h2 id="variables-and-constants">Variables and Constants</h2>
+<p>
+  Zig has two primary declarations for storing values: <code>var</code> for mutable variables and <code>const</code> for immutable bindings.
+</p>
+
+  <!-- LEVEL-3: var vs. const -->
+  <h3 id="var-vs-const">var vs. const</h3>
+  <pre><code>var x: i32 = 10;     // x is mutable
+x = 20;               // valid, x is now 20
+
+const y: i32 = 42;    // y is immutable
+// y = 50;            // error, y is const
+</code></pre>
+
+  <!-- LEVEL-3: Block Scopes -->
+  <h3 id="block-scopes">Block Scopes</h3>
+  <p>
+    Variables declared in a block are visible only within that block and its children, 
+    preventing accidental global scope pollution.
+  </p>
+
+  <!-- LEVEL-3: Shadowing -->
+  <h3 id="shadowing">Shadowing</h3>
+  <p>
+    A local variable can shadow a variable with the same name in a parent scope. 
+    This can be useful, but be careful to keep code clear and unambiguous.
+  </p>
+
+<!-- LEVEL-2: Naming Conventions -->
+<h2 id="naming-conventions">Naming Conventions</h2>
+<p>
+  Zig doesn’t strictly enforce naming style, but there are generally accepted conventions.
+</p>
+
+  <!-- LEVEL-3: Identifiers & Style -->
+  <h3 id="identifiers-and-style">Identifiers &amp; Style</h3>
+  <ul>
+    <li>Use <strong>snake_case</strong> for function and variable names (e.g., <code>compute_sum</code>).</li>
+    <li>Constants often use <strong>PascalCase</strong> or <strong>camelCase</strong> if they're widely used as “constants.”</li>
+    <li>Types (enums, structs) can also follow PascalCase or remain in snake_case; consistency is key.</li>
+  </ul>
+
+  <!-- LEVEL-3: Module / File Names -->
+  <h3 id="module-file-names">Module / File Names</h3>
+  <p>
+    Keep filenames lowercase with underscores (e.g., <code>file_io.zig</code>). 
+    The Zig standard library uses this style extensively.
+  </p>
+
+<!-- LEVEL-2: Comments and Documentation -->
+<h2 id="comments-and-documentation">Comments and Documentation</h2>
+<p>
+  Zig supports single-line (<code>//</code>) and multi-line (<code>/* ... */</code>) comments. 
+  Documentation comments are written with triple slashes (<code>///</code>) and support doc generation.
+</p>
+
+  <!-- LEVEL-3: Single-line & Multi-line Comments -->
+  <h3 id="single-and-multi-line-comments">Single-line &amp; Multi-line Comments</h3>
+  <pre><code>// This is a single-line comment
+
+/* 
+   This is a multi-line comment.
+   Can be used to comment out large code blocks 
+   or provide extended explanations.
+*/
+</code></pre>
+
+  <!-- LEVEL-3: Doc Comments (///) -->
+  <h3 id="doc-comments">Doc Comments (///)</h3>
+  <pre><code>/// This function does something important.
+/// Additional lines will be included in generated docs.
+fn doSomething() void {
+    // ...
+}
+</code></pre>
+
+<!-- LEVEL-2: Code Organization -->
+<h2 id="code-organization">Code Organization</h2>
+
+  <!-- LEVEL-3: Files & Modules -->
+  <h3 id="files-and-modules">Files &amp; Modules</h3>
+  <p>
+    Each <code>.zig</code> file is essentially a module. You can import them using <code>@import</code>. 
+    For larger projects, group related code into modules for clarity.
+  </p>
+
+  <!-- LEVEL-3: Package Imports (@import, relative/absolute paths) -->
+  <h3 id="package-imports">Package Imports (@import, relative/absolute paths)</h3>
+  <pre><code>const mymod = @import("path/to/mymod.zig");
+</code></pre>
+  <p>
+    The build system can also define package paths, letting you use <code>@import("mymod")</code> if configured in <code>build.zig</code>.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Data Types
+-->
+<h1 id="data-types">Data Types</h1>
+
+<!-- LEVEL-2: Primitive Types -->
+<h2 id="primitive-types">Primitive Types</h2>
+
+  <!-- LEVEL-3: Integers (Signed/Unsigned, Fixed-Width, comptime_int) -->
+  <h3 id="integers">Integers (Signed/Unsigned, Fixed-Width, comptime_int)</h3>
+  <p>
+    Zig allows fixed-width integers (e.g., <code>i8</code>, <code>u32</code>) and also a special <code>comptime_int</code> type for compile-time known constants.
+  </p>
+
+  <!-- LEVEL-3: Floating-Point (f16, f32, f64, comptime_float) -->
+  <h3 id="floating-point">Floating-Point (f16, f32, f64, comptime_float)</h3>
+  <p>
+    Zig supports half, single, and double precision, plus <code>comptime_float</code> for compile-time constants.
+  </p>
+
+  <!-- LEVEL-3: Booleans -->
+  <h3 id="booleans">Booleans</h3>
+  <p>
+    Use <code>bool</code> for true/false values. It is a distinct type from integers.
+  </p>
+
+  <!-- LEVEL-3: Characters (u8 code points) -->
+  <h3 id="characters">Characters (u8 code points)</h3>
+  <p>
+    Zig doesn’t have a dedicated “char” type like C; single-byte ASCII characters are typically <code>u8</code>. 
+    For Unicode strings, you handle bytes or codepoints explicitly.
+  </p>
+
+<!-- LEVEL-2: Compound Types -->
+<h2 id="compound-types">Compound Types</h2>
+
+  <!-- LEVEL-3: Arrays & Slices -->
+  <h3 id="arrays-and-slices">Arrays &amp; Slices</h3>
+  <p>
+    <strong>Arrays</strong> have fixed size at compile-time, while <strong>slices</strong> are views into arrays or memory, storing length alongside a pointer:
+  </p>
+  <pre><code>var arr: [5]u8 = [5]u8{1, 2, 3, 4, 5};
+var slice = arr[0..3]; // slice of first 3 elements
+</code></pre>
+
+  <!-- LEVEL-3: Strings -->
+  <h3 id="strings">Strings</h3>
+  <p>
+    A string is usually a slice of <code>u8</code> or UTF-8 data. 
+    <code>const msg = "Hello, Zig!";</code> yields type <code>[]const u8</code> at compile time.
+  </p>
+
+  <!-- LEVEL-3: Tuples -->
+  <h3 id="tuples">Tuples</h3>
+  <p>
+    Tuples can group values of different types without defining a struct:
+  </p>
+  <pre><code>const my_tuple = .{ 123, "abc", true };
+</code></pre>
+
+  <!-- LEVEL-3: Structures (struct) -->
+  <h3 id="structures">Structures (struct)</h3>
+  <pre><code>const Point = struct {
+    x: f64,
+    y: f64,
+};
+
+var p = Point{ .x = 3.2, .y = 1.7 };
+</code></pre>
+
+  <!-- LEVEL-3: Enumerations (enum) -->
+  <h3 id="enumerations">Enumerations (enum)</h3>
+  <p>
+    Enums can be simple or have specified integer backing:
+  </p>
+  <pre><code>const Color = enum { Red, Green, Blue };
+// or
+const ErrorCode: u8 = enum { 
+    OK = 0, 
+    NotFound = 1, 
+    PermissionDenied = 2 
+};
+</code></pre>
+
+  <!-- LEVEL-3: Unions -->
+  <h3 id="unions">Unions</h3>
+  <p>
+    Unions allow multiple fields with only one active at a time:
+  </p>
+  <pre><code>const Data = union(enum) {
+    integer: i32,
+    float: f64,
+    text: []const u8,
+};
+</code></pre>
+
+<!-- LEVEL-2: Pointers -->
+<h2 id="pointers">Pointers</h2>
+
+  <!-- LEVEL-3: Unsafe vs. Safe Pointers -->
+  <h3 id="unsafe-vs-safe-pointers">Unsafe vs. Safe Pointers</h3>
+  <p>
+    Zig pointers are <em>usually</em> unsafe, meaning they can dangle if not carefully managed. 
+    You may use references or slices when possible to enforce safety invariants.
+  </p>
+
+  <!-- LEVEL-3: Sentinel-Terminated Pointers -->
+  <h3 id="sentinel-terminated-pointers">Sentinel-Terminated Pointers</h3>
+  <p>
+    Pointers can carry a sentinel value to mark the end, e.g., a null terminator for strings. 
+    <code>[*:0]const u8</code> means “pointer to const u8, terminated by 0.”
+  </p>
+
+  <!-- LEVEL-3: Alignment & Address Spaces -->
+  <h3 id="alignment-and-address-spaces">Alignment &amp; Address Spaces</h3>
+  <p>
+    Zig allows specifying pointer alignment. The <code>align</code> keyword can be used in type declarations for performance or hardware constraints.
+  </p>
+
+<!-- LEVEL-2: Optionals (?T) -->
+<h2 id="optionals">Optionals (?T)</h2>
+
+  <!-- LEVEL-3: Usage & Unwrapping -->
+  <h3 id="usage-and-unwrapping">Usage &amp; Unwrapping</h3>
+  <p>
+    An optional <code>?T</code> can hold either a value of type <code>T</code> or <code>null</code>. 
+    Example:
+  </p>
+  <pre><code>var maybe_val: ?i32 = null;
+maybe_val = 123;
+
+if (maybe_val) |v| {
+    // v is i32
+} else {
+    // is null
+}
+</code></pre>
+
+  <!-- LEVEL-3: Comparisons with Null -->
+  <h3 id="comparisons-with-null">Comparisons with Null</h3>
+  <p>
+    Use <code>if (maybe_val == null)</code> or pattern matching with <code>if (maybe_val) |val| {...}</code> to handle null.
+  </p>
+
+<!-- LEVEL-2: Error Unions (!T) -->
+<h2 id="error-unions">Error Unions (!T)</h2>
+
+  <!-- LEVEL-3: Defining and Propagating Errors -->
+  <h3 id="defining-and-propagating-errors">Defining and Propagating Errors</h3>
+  <p>
+    Errors in Zig are typed and use <code>error</code> sets. 
+    You return them via <code>!T</code> to indicate a function can fail:
+  </p>
+  <pre><code>fn doStuff() !void {
+    // return error.SomeError if something goes wrong
+}
+</code></pre>
+
+  <!-- LEVEL-3: Error Sets -->
+  <h3 id="error-sets">Error Sets</h3>
+  <p>
+    You can explicitly define error sets:
+  </p>
+  <pre><code>const MyErrors = error { Invalid, NotReady, };
+
+fn myFunc() MyErrors!void { ... }
+</code></pre>
+
+  <!-- LEVEL-3: try and catch -->
+  <h3 id="try-and-catch">try and catch</h3>
+  <p>
+    Use <code>try</code> to propagate errors up the call stack:
+  </p>
+  <pre><code>try doStuff(); // If it fails, the error bubbles up
+
+const result = doStuff() catch |err| {
+    // handle error here
+};
+</code></pre>
+
+
+<!-- 
+  LEVEL-1: Control Flow
+-->
+<h1 id="control-flow">Control Flow</h1>
+
+<!-- LEVEL-2: If Statements & Expressions -->
+<h2 id="if-statements-and-expressions">If Statements &amp; Expressions</h2>
+
+  <!-- LEVEL-3: if / else syntax -->
+  <h3 id="if-else-syntax">if / else syntax</h3>
+  <pre><code>if (condition) {
+    // do something
+} else {
+    // otherwise
+}
+</code></pre>
+
+  <!-- LEVEL-3: Optional chaining (if (optional) |value| {...}) -->
+  <h3 id="optional-chaining">Optional chaining (if (optional) |value| {...})</h3>
+  <p>
+    If <code>myOpt</code> is an optional (<code>?T</code>), you can do:
+  </p>
+  <pre><code>if (myOpt) |value| {
+    // value is of type T
+} else {
+    // myOpt was null
+}
+</code></pre>
+
+  <!-- LEVEL-3: Inline if-expressions -->
+  <h3 id="inline-if-expressions">Inline if-expressions</h3>
+  <p>
+    Zig allows if-expressions to evaluate to a value:
+  </p>
+  <pre><code>const x = if (flag) 10 else 20;
+</code></pre>
+
+<!-- LEVEL-2: While Loops -->
+<h2 id="while-loops">While Loops</h2>
+
+  <!-- LEVEL-3: Basic while Conditions -->
+  <h3 id="basic-while-conditions">Basic while Conditions</h3>
+  <pre><code>while (i &lt; 10) : (i += 1) {
+    // loop body
+}
+</code></pre>
+
+  <!-- LEVEL-3: The while (condition) |item| {...} pattern -->
+  <h3 id="the-while-condition-item-pattern">while (condition) |item| {...} pattern</h3>
+  <p>
+    You can iterate over an iterator or a slice:
+  </p>
+  <pre><code>while (someIterable.next()) |item| {
+    // use item
+}
+</code></pre>
+
+  <!-- LEVEL-3: Breaking early with break -->
+  <h3 id="breaking-early-with-break">Breaking early with break</h3>
+  <p>
+    Use <code>break</code> to exit a loop immediately.
+  </p>
+
+<!-- LEVEL-2: For Loops -->
+<h2 id="for-loops">For Loops</h2>
+
+  <!-- LEVEL-3: Iterating over Arrays, Slices, Ranges -->
+  <h3 id="iterating-over-collections">Iterating over Arrays, Slices, Ranges</h3>
+  <pre><code>const arr = [_]u8{ 1, 2, 3 };
+for (arr) |val| {
+    // do something with val
+}
+</code></pre>
+
+  <!-- LEVEL-3: Index & Value Variables -->
+  <h3 id="index-and-value-variables">Index &amp; Value Variables</h3>
+  <p>
+    You can capture both index and value:
+  </p>
+  <pre><code>for (arr) |val, i| {
+    // i is the index, val is the element
+}
+</code></pre>
+
+<!-- LEVEL-2: Ranges -->
+<h2 id="ranges">Ranges</h2>
+
+  <!-- LEVEL-3: Numeric Ranges -->
+  <h3 id="numeric-ranges">Numeric Ranges</h3>
+  <p>
+    You can define numeric ranges as <code>0..10</code> (exclusive end) or <code>0..=10</code> (inclusive end).
+  </p>
+
+  <!-- LEVEL-3: Using with for -->
+  <h3 id="using-ranges-with-for">Using with for</h3>
+  <pre><code>for (0..10) |i| {
+    // i goes 0 to 9
+}
+</code></pre>
+
+<!-- LEVEL-2: Break & Continue -->
+<h2 id="break-and-continue">Break &amp; Continue</h2>
+
+  <!-- LEVEL-3: Breaking out of Loops -->
+  <h3 id="breaking-out-of-loops">Breaking out of Loops</h3>
+  <p>
+    <code>break</code> stops a loop immediately; you can also label loops for advanced control flow.
+  </p>
+
+  <!-- LEVEL-3: Skipping Iterations -->
+  <h3 id="skipping-iterations">Skipping Iterations</h3>
+  <p>
+    <code>continue</code> skips the current iteration and goes to the next.
+  </p>
+
+<!-- LEVEL-2: Switch Statements -->
+<h2 id="switch-statements">Switch Statements</h2>
+
+  <!-- LEVEL-3: Pattern Matching with Enums, Tagged Unions, etc. -->
+  <h3 id="pattern-matching">Pattern Matching with Enums, Tagged Unions, etc.</h3>
+  <pre><code>switch (color) {
+    .Red => { /* handle red */ },
+    .Green => { /* handle green */ },
+    .Blue => { /* handle blue */ },
+}
+</code></pre>
+
+  <!-- LEVEL-3: Exhaustive vs. Non-Exhaustive Switch -->
+  <h3 id="exhaustive-vs-non-exhaustive-switch">Exhaustive vs. Non-Exhaustive Switch</h3>
+  <p>
+    Switching over an <strong>enum</strong> is exhaustive (you must handle all cases) unless you include an <code>else</code> branch. 
+    For error unions and other types, you can also handle each variant or use a fallback.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Memory Management
+-->
+<h1 id="memory-management">Memory Management</h1>
+
+<!-- LEVEL-2: Allocators -->
+<h2 id="allocators">Allocators</h2>
+
+  <!-- LEVEL-3: Standard Allocators (std.heap.page_allocator, std.heap.ArenaAllocator, ...) -->
+  <h3 id="standard-allocators">Standard Allocators (std.heap.page_allocator, std.heap.ArenaAllocator, ...)</h3>
+  <p>
+    Zig’s standard library includes a variety of allocators. The <code>page_allocator</code> is a basic system allocator. 
+    <code>ArenaAllocator</code> or <code>GeneralPurposeAllocator</code> can be used for more controlled memory usage.
+  </p>
+
+  <!-- LEVEL-3: Creating Custom Allocators -->
+  <h3 id="creating-custom-allocators">Creating Custom Allocators</h3>
+  <p>
+    You can define your own allocators by implementing the <code>std.mem.Allocator</code> interface. 
+    This is helpful for custom memory pools or specialized embedded systems.
+  </p>
+
+  <!-- LEVEL-3: Lifetime Considerations -->
+  <h3 id="lifetime-considerations">Lifetime Considerations</h3>
+  <p>
+    Zig does not have a garbage collector, so you must ensure that allocations are freed at the correct time. 
+    Leaked or dangling pointers can lead to memory misuse.
+  </p>
+
+<!-- LEVEL-2: Manual Memory Control -->
+<h2 id="manual-memory-control">Manual Memory Control</h2>
+
+  <!-- LEVEL-3: Allocating Arrays, Slices, Structs -->
+  <h3 id="allocating-arrays-slices-structs">Allocating Arrays, Slices, Structs</h3>
+  <pre><code>const allocator = std.heap.page_allocator;
+const slice = try allocator.alloc(u8, 100); // allocate 100 bytes
+</code></pre>
+
+  <!-- LEVEL-3: Freeing & Resizing -->
+  <h3 id="freeing-and-resizing">Freeing &amp; Resizing</h3>
+  <p>
+    Use <code>allocator.free</code> or <code>allocator.realloc</code> as needed:
+  </p>
+  <pre><code>allocator.free(slice);
+</code></pre>
+
+<!-- LEVEL-2: Pointers & Slices Revisited -->
+<h2 id="pointers-and-slices-revisited">Pointers &amp; Slices Revisited</h2>
+
+  <!-- LEVEL-3: Pointer Arithmetic -->
+  <h3 id="pointer-arithmetic">Pointer Arithmetic</h3>
+  <p>
+    Zig allows pointer arithmetic (e.g., <code>ptr + 1</code>), but it’s up to the programmer to avoid out-of-bounds errors.
+  </p>
+
+  <!-- LEVEL-3: Slicing Arrays -->
+  <h3 id="slicing-arrays">Slicing Arrays</h3>
+  <p>
+    <code>arr[a..b]</code> creates a slice from index <code>a</code> (inclusive) to <code>b</code> (exclusive).
+  </p>
+
+<!-- LEVEL-2: Working with Zero-Cost Abstractions -->
+<h2 id="working-with-zero-cost-abstractions">Working with Zero-Cost Abstractions</h2>
+
+  <!-- LEVEL-3: Minimizing Runtime Cost -->
+  <h3 id="minimizing-runtime-cost">Minimizing Runtime Cost</h3>
+  <p>
+    Zig’s philosophy is that abstractions should compile down to minimal overhead code. 
+    For instance, slices simply carry a pointer and length, with no hidden reference counting or GC.
+  </p>
+
+  <!-- LEVEL-3: Ensuring Safety -->
+  <h3 id="ensuring-safety">Ensuring Safety</h3>
+  <p>
+    Safety checks (like bounds checking) can be toggled in various build modes. 
+    In Debug builds, Zig performs more checks to catch issues early. 
+    In release modes, these checks can be optimized away.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Error Handling
+-->
+<h1 id="error-handling">Error Handling</h1>
+
+<!-- LEVEL-2: Declaring Errors -->
+<h2 id="declaring-errors">Declaring Errors</h2>
+
+  <!-- LEVEL-3: error{SomeError, AnotherError}, error.UnexpectedEOF -->
+  <h3 id="error-literals">error{SomeError, AnotherError}, error.UnexpectedEOF</h3>
+  <p>
+    Errors can be declared inline (<code>error.SomeError</code>) or as sets <code>error{Err1, Err2}</code>. 
+    You can also define well-known errors like <code>error.OutOfMemory</code>.
+  </p>
+
+<!-- LEVEL-2: Error Propagation -->
+<h2 id="error-propagation">Error Propagation</h2>
+
+  <!-- LEVEL-3: Using try/catch -->
+  <h3 id="using-try-and-catch">Using try/catch</h3>
+  <p>
+    <code>try</code> automatically bubbles up the error, while <code>catch</code> intercepts it:
+  </p>
+  <pre><code>try mightFail() catch |err| {
+    // handle error
+};
+</code></pre>
+
+  <!-- LEVEL-3: Error Unions (!T) -->
+  <h3 id="error-unions-notation">Error Unions (!T)</h3>
+  <p>
+    A function returning <code>!T</code> indicates it either returns <code>T</code> or an error. 
+    This type is central to Zig’s error handling approach.
+  </p>
+
+  <!-- LEVEL-3: return error.SomethingBad -->
+  <h3 id="return-error">return error.SomethingBad</h3>
+  <p>
+    When you hit an error condition in your function, return an appropriate error literal:
+  </p>
+  <pre><code>return error.InvalidOperation;
+</code></pre>
+
+<!-- LEVEL-2: Handling Errors -->
+<h2 id="handling-errors">Handling Errors</h2>
+
+  <!-- LEVEL-3: Pattern Matching with switch -->
+  <h3 id="pattern-matching-with-switch">Pattern Matching with switch</h3>
+  <pre><code>const result = doSomething() catch |err| return err;
+
+switch (result) {
+    0 => {},
+    1 => {},
+    else => {},
+}
+</code></pre>
+
+  <!-- LEVEL-3: Using catch |err| {...} -->
+  <h3 id="using-catch-err">Using catch |err| {...}</h3>
+  <p>
+    Catch an error inline to handle it immediately or transform it:
+  </p>
+  <pre><code>const val = doSomething() catch |err| {
+    std.debug.print("Error encountered: {}\n", .{err});
+    return err;
+};
+</code></pre>
+
+<!-- LEVEL-2: Defer & Cleanup -->
+<h2 id="defer-and-cleanup">Defer &amp; Cleanup</h2>
+
+  <!-- LEVEL-3: defer statements for resource cleanup -->
+  <h3 id="defer-statements">defer statements for resource cleanup</h3>
+  <pre><code>const data = try allocator.alloc(u8, 100);
+defer allocator.free(data);
+
+// Work with data here...
+</code></pre>
+
+  <!-- LEVEL-3: Error-Safe Resource Management -->
+  <h3 id="error-safe-resource-management">Error-Safe Resource Management</h3>
+  <p>
+    <code>defer</code> ensures that resources are freed even if an error is thrown partway through the function. 
+    This pattern helps avoid memory leaks.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Compile-Time Features
+-->
+<h1 id="compile-time-features">Compile-Time Features</h1>
+
+<!-- LEVEL-2: comptime Keyword -->
+<h2 id="comptime-keyword">comptime Keyword</h2>
+
+  <!-- LEVEL-3: Compile-Time Conditionals -->
+  <h3 id="compile-time-conditionals">Compile-Time Conditionals</h3>
+  <pre><code>if (std.builtin.os == .linux) {
+    // This code is compiled only for Linux
+}
+</code></pre>
+
+  <!-- LEVEL-3: Compile-Time Loops -->
+  <h3 id="compile-time-loops">Compile-Time Loops</h3>
+  <p>
+    Using <code>comptime</code>, you can iterate over known sets or generate code at compile time.
+  </p>
+
+<!-- LEVEL-2: Compile-Time Functions -->
+<h2 id="compile-time-functions">Compile-Time Functions</h2>
+
+  <!-- LEVEL-3: fn foo(comptime x: T) ... -->
+  <h3 id="fn-foo-comptime">fn foo(comptime x: T) ...</h3>
+  <p>
+    Functions can take <code>comptime</code> parameters to evaluate them at compile time, enabling advanced metaprogramming.
+  </p>
+
+  <!-- LEVEL-3: Evaluating Functions at Compile Time -->
+  <h3 id="evaluating-functions-at-compile-time">Evaluating Functions at Compile Time</h3>
+  <p>
+    Marking a function with <code>comptime</code> or passing compile-time known arguments 
+    allows the compiler to produce compile-time constants or unrolled loops.
+  </p>
+
+<!-- LEVEL-2: Reflection & Metaprogramming -->
+<h2 id="reflection-and-metaprogramming">Reflection &amp; Metaprogramming</h2>
+
+  <!-- LEVEL-3: @typeInfo, @typeName, @field -->
+  <h3 id="typeinfo-typename-field">(@typeInfo, @typeName, @field)</h3>
+  <p>
+    Zig provides builtin functions for reflection. <code>@typeInfo</code> returns a structure describing a type; 
+    <code>@field</code> can introspect fields of structs at compile time, enabling generic code.
+  </p>
+
+  <!-- LEVEL-3: Generics / Parameterized Code -->
+  <h3 id="generics-and-parameterized-code">Generics / Parameterized Code</h3>
+  <p>
+    You can write functions that accept <code>comptime</code> parameters of any type, effectively creating generic code:
+  </p>
+  <pre><code>fn maxInt(comptime T: type, a: T, b: T) T {
+    return if (a &gt; b) a else b;
+}
+</code></pre>
+
+<!-- LEVEL-2: Inline Assembly -->
+<h2 id="inline-assembly">Inline Assembly</h2>
+
+  <!-- LEVEL-3: asm syntax -->
+  <h3 id="asm-syntax">Syntax, supported instructions</h3>
+  <p>
+    You can embed inline assembly (<code>asm</code>) in Zig code. 
+    The syntax allows specifying inputs/outputs/clobbers similar to GCC’s inline assembly.
+  </p>
+
+  <!-- LEVEL-3: asm safety & constraints -->
+  <h3 id="asm-safety-constraints">Safety &amp; Constraints</h3>
+  <p>
+    Inline assembly is inherently unsafe. You must specify constraints and ensure 
+    that registers or memory used by the assembly won't conflict with your Zig code.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Concurrency & Asynchronous I/O
+-->
+<h1 id="concurrency-and-async-io">Concurrency &amp; Asynchronous I/O</h1>
+
+<!-- LEVEL-2: Async Functions -->
+<h2 id="async-functions">Async Functions</h2>
+
+  <!-- LEVEL-3: async fn basics -->
+  <h3 id="async-fn-basics">async fn basics</h3>
+  <p>
+    Zig’s <code>async</code> functions can suspend and resume, enabling concurrency without heavy threads. 
+    For example:
+  </p>
+  <pre><code>pub fn main() !void {
+    const result = async doWork();
+    await result;
+}
+</code></pre>
+
+  <!-- LEVEL-3: await usage -->
+  <h3 id="await-usage">await usage</h3>
+  <p>
+    <code>await</code> blocks the current function until the async function completes, resuming once data is ready.
+  </p>
+
+<!-- LEVEL-2: Suspend & Resume -->
+<h2 id="suspend-and-resume">Suspend &amp; Resume</h2>
+
+  <!-- LEVEL-3: Cooperative Concurrency -->
+  <h3 id="cooperative-concurrency">Cooperative Concurrency</h3>
+  <p>
+    Each async function can <code>suspend</code> itself, allowing other tasks to run. This is cooperative (not preemptive) concurrency.
+  </p>
+
+  <!-- LEVEL-3: Event Loop Integration -->
+  <h3 id="event-loop-integration">Event Loop Integration</h3>
+  <p>
+    Zig’s standard library provides an event loop that schedules async tasks. 
+    This is particularly useful for I/O-bound applications.
+  </p>
+
+<!-- LEVEL-2: Channel & Queue Abstractions -->
+<h2 id="channel-and-queue-abstractions">Channel &amp; Queue Abstractions</h2>
+
+  <!-- LEVEL-3: Passing Data Between Tasks -->
+  <h3 id="passing-data-between-tasks">Passing Data Between Tasks</h3>
+  <p>
+    Zig’s <code>std.Channel</code> (when available) or custom concurrency primitives let you safely share data between async tasks.
+  </p>
+
+  <!-- LEVEL-3: std.Channel (if available in your Zig version) -->
+  <h3 id="std-channel">std.Channel (if available in your Zig version)</h3>
+  <p>
+    <code>std.Channel</code> is a high-level concurrency abstraction that uses the event loop. 
+    Check your Zig version for availability and usage examples.
+  </p>
+
+<!-- LEVEL-2: Example: Asynchronous Network Operations -->
+<h2 id="async-network-operations">Example: Asynchronous Network Operations</h2>
+<p>
+  Zig’s stdlib provides async network APIs (e.g., <code>std.net.tcp</code>). 
+  You can create async server/client code that leverages the event loop for non-blocking I/O.
+</p>
+
+
+<!-- 
+  LEVEL-1: Standard Library Essentials
+-->
+<h1 id="standard-library-essentials">Standard Library Essentials</h1>
+
+<!-- LEVEL-2: Overview of std -->
+<h2 id="overview-of-std">Overview of std</h2>
+<p>
+  Zig’s <code>std</code> library offers data structures, memory utilities, file handling, networking, and more. 
+  You import modules from <code>std</code> as needed.
+</p>
+
+  <!-- LEVEL-3: Modules & How to Import -->
+  <h3 id="modules-and-imports">Modules &amp; How to Import</h3>
+  <pre><code>const std = @import("std");
+const fs = std.fs;
+</code></pre>
+
+<!-- LEVEL-2: Common Modules -->
+<h2 id="common-modules">Common Modules</h2>
+
+  <!-- LEVEL-3: std.math (math functions) -->
+  <h3 id="std-math">std.math (math functions)</h3>
+  <p>
+    Provides math functions like <code>sqrt</code>, <code>sin</code>, <code>cos</code>, <code>pow</code>, etc.
+  </p>
+
+  <!-- LEVEL-3: std.fs (file system handling) -->
+  <h3 id="std-fs">std.fs (file system handling)</h3>
+  <p>
+    Offers file I/O, path utilities, and directory iteration. Example:
+  </p>
+  <pre><code>const file = try std.fs.cwd().openFile("test.txt", .{ .read = true });
+</code></pre>
+
+  <!-- LEVEL-3: std.mem (memory utilities) -->
+  <h3 id="std-mem">std.mem (memory utilities)</h3>
+  <p>
+    Functions for comparing, searching, copying memory/slices, etc.
+  </p>
+
+  <!-- LEVEL-3: std.testing (testing utilities) -->
+  <h3 id="std-testing">std.testing (testing utilities)</h3>
+  <p>
+    Contains assertions like <code>std.testing.expect</code> and <code>std.testing.expectEqual</code>, 
+    used within <code>test</code> blocks.
+  </p>
+
+  <!-- LEVEL-3: std.time (time utilities) -->
+  <h3 id="std-time">std.time (time utilities)</h3>
+  <p>
+    Time-related functions, such as getting the current time or measuring durations.
+  </p>
+
+<!-- LEVEL-2: Data Structures in std -->
+<h2 id="data-structures-in-std">Data Structures in std</h2>
+
+  <!-- LEVEL-3: ArrayList, ArrayHashMap, LinkedList, etc. -->
+  <h3 id="arraylist-arrayhashmap-linkedlist-etc">ArrayList, ArrayHashMap, LinkedList, etc.</h3>
+  <p>
+    Zig’s standard library provides resizable lists (<code>std.ArrayList</code>), hash maps (<code>std.HashMap</code> or <code>std.ArrayHashMap</code>), linked lists, and more.
+  </p>
+
+  <!-- LEVEL-3: Usage Examples & Memory Allocation -->
+  <h3 id="usage-examples-and-allocation">Usage Examples &amp; Memory Allocation</h3>
+  <pre><code>var list = std.ArrayList(u8).init(allocator);
+try list.append(42);
+</code></pre>
+
+<!-- LEVEL-2: Utilities & Helpers -->
+<h2 id="utilities-and-helpers">Utilities &amp; Helpers</h2>
+
+  <!-- LEVEL-3: std.debug (logging, printing) -->
+  <h3 id="std-debug">std.debug (logging, printing)</h3>
+  <p>
+    <code>std.debug.print</code> allows formatted printing for debugging or console output.
+  </p>
+
+  <!-- LEVEL-3: std.os (operating system calls) -->
+  <h3 id="std-os">std.os (operating system calls)</h3>
+  <p>
+    Direct wrappers around OS syscalls for advanced usage.
+  </p>
+
+  <!-- LEVEL-3: std.process (launching processes) -->
+  <h3 id="std-process">std.process (launching processes)</h3>
+  <p>
+    Allows you to spawn child processes, capture their outputs, and wait for completion.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Interfacing with C/C++
+-->
+<h1 id="interfacing-with-c-cpp">Interfacing with C/C++</h1>
+
+<!-- LEVEL-2: C Headers & FFI -->
+<h2 id="c-headers-and-ffi">@cImport and @cInclude</h2>
+<p>
+  Zig provides first-class interoperability with C. Use <code>@cImport</code> to include C headers and automatically 
+  generate bindings at compile time:
+</p>
+<pre><code>const c = @cImport({
+    @cInclude("stdio.h");
+});
+</code></pre>
+
+  <!-- LEVEL-3: Linking against system libraries -->
+  <h3 id="linking-against-system-libraries">Linking against system libraries</h3>
+  <p>
+    In <code>build.zig</code>, use <code>exe.linkSystemLibrary("c")</code> or <code>exe.linkSystemLibrary("ssl")</code> 
+    to link against a system library.
+  </p>
+
+<!-- LEVEL-2: Calling Zig from C -->
+<h2 id="calling-zig-from-c">Calling Zig from C</h2>
+
+  <!-- LEVEL-3: Generating .h files with zig translate-c -->
+  <h3 id="generating-header-files-with-translate-c">Generating .h files with zig translate-c</h3>
+  <p>
+    <code>zig translate-c</code> can convert C headers to Zig. To call Zig code from C, 
+    you can also emit a <code>.h</code> interface from your Zig code with careful extern declarations.
+  </p>
+
+<!-- LEVEL-2: Mixed Projects -->
+<h2 id="mixed-projects">Mixed Projects</h2>
+
+  <!-- LEVEL-3: Organizing Zig + C/C++ code -->
+  <h3 id="organizing-zig-plus-cc-code">Organizing Zig + C/C++ code</h3>
+  <p>
+    Many teams keep a <code>csrc/</code> folder for C code and a <code>src/</code> folder for Zig code. 
+    Your <code>build.zig</code> can compile C files, link them, and import headers from the Zig side.
+  </p>
+
+  <!-- LEVEL-3: Build System Integration -->
+  <h3 id="build-system-integration">Build System Integration</h3>
+  <p>
+    Zig’s build system can replace or wrap CMake, allowing a single build script for both Zig and C. 
+    Alternatively, you can call <code>zig cc</code> or <code>zig c++</code> from external scripts for cross compilation.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Testing & Debugging
+-->
+<h1 id="testing-and-debugging">Testing &amp; Debugging</h1>
+
+<!-- LEVEL-2: Test Declarations -->
+<h2 id="test-declarations">Test Declarations</h2>
+
+  <!-- LEVEL-3: test "description" {...} -->
+  <h3 id="test-description-block">test "description" {...}</h3>
+  <pre><code>test "my first test" {
+    std.testing.expect(1 + 1 == 2);
+}
+</code></pre>
+
+  <!-- LEVEL-3: Running Tests with zig test -->
+  <h3 id="running-tests-with-zig-test">Running Tests with zig test</h3>
+  <p>
+    Run <code>zig test main.zig</code> to compile and execute all <code>test</code> blocks in <code>main.zig</code>. 
+    Or use <code>zig build test</code> if you have a <code>build.zig</code> file that defines tests.
+  </p>
+
+<!-- LEVEL-2: Test Organization -->
+<h2 id="test-organization">Test Organization</h2>
+
+  <!-- LEVEL-3: Multiple Test Files, Modules -->
+  <h3 id="multiple-test-files">Multiple Test Files, Modules</h3>
+  <p>
+    You can place <code>test</code> blocks in multiple files. The build system can gather them for a single test run, 
+    keeping your test code organized.
+  </p>
+
+  <!-- LEVEL-3: Using std.testing Assertions -->
+  <h3 id="using-std-testing-assertions">Using std.testing Assertions</h3>
+  <p>
+    <code>std.testing.expect</code> checks a boolean condition, while <code>expectEqual</code> compares two values. 
+    If an assertion fails, the test fails.
+  </p>
+
+<!-- LEVEL-2: Debugging -->
+<h2 id="debugging">Debugging</h2>
+
+  <!-- LEVEL-3: Compiler Flags (-femit-llvm-ir, -fno-strip) -->
+  <h3 id="compiler-flags">Compiler Flags (-femit-llvm-ir, -fno-strip)</h3>
+  <p>
+    Use <code>-femit-llvm-ir</code> to generate LLVM IR, <code>-fno-strip</code> to keep debug symbols. 
+    Combine with <code>-O0</code> or <code>Debug</code> mode for a better debugging experience.
+  </p>
+
+  <!-- LEVEL-3: Using LLDB or GDB -->
+  <h3 id="using-lldb-or-gdb">Using LLDB or GDB</h3>
+  <p>
+    Compile in debug mode, then run <code>lldb</code> or <code>gdb</code> on your executable to set breakpoints, inspect variables, etc.
+  </p>
+
+  <!-- LEVEL-3: Print Debugging with std.debug.print -->
+  <h3 id="print-debugging-with-stddebugprint">Print Debugging with std.debug.print</h3>
+  <p>
+    Sometimes a simple <code>std.debug.print</code> is enough to see what's happening in your code.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Deployment & Distribution
+-->
+<h1 id="deployment-and-distribution">Deployment &amp; Distribution</h1>
+
+<!-- LEVEL-2: Cross-Compilation in Depth -->
+<h2 id="cross-compilation-in-depth">Cross-Compilation in Depth</h2>
+
+  <!-- LEVEL-3: Specifying --target (CPU, OS, ABI) -->
+  <h3 id="specifying-target">Specifying --target (CPU, OS, ABI)</h3>
+  <p>
+    Zig’s toolchain can build for other platforms seamlessly, e.g. 
+    <code>zig build -Dtarget=aarch64-macos</code> to build for Apple Silicon from an Intel Mac.
+  </p>
+
+  <!-- LEVEL-3: Building Static vs. Shared Libraries -->
+  <h3 id="building-static-vs-shared-libraries">Building Static vs. Shared Libraries</h3>
+  <p>
+    Use <code>zig build lib</code> or configure <code>build.zig</code> with <code>addSharedLibrary</code> or <code>addStaticLibrary</code>.
+  </p>
+
+  <!-- LEVEL-3: Packaging for Multiple Platforms -->
+  <h3 id="packaging-for-multiple-platforms">Packaging for Multiple Platforms</h3>
+  <p>
+    Run separate <code>zig build</code> steps with different <code>--target</code> values. 
+    You can produce Windows, Linux, and macOS binaries from a single machine.
+  </p>
+
+<!-- LEVEL-2: Optimization Modes -->
+<h2 id="optimization-modes">Optimization Modes</h2>
+
+  <!-- LEVEL-3: Debug -->
+  <h3 id="debug">Debug</h3>
+  <p>
+    Zero optimizations, maximum debug checks.
+  </p>
+
+  <!-- LEVEL-3: ReleaseSafe -->
+  <h3 id="releasesafe">ReleaseSafe</h3>
+  <p>
+    Optimized but preserves safety checks (like bounds checking).
+  </p>
+
+  <!-- LEVEL-3: ReleaseFast -->
+  <h3 id="releasefast">ReleaseFast</h3>
+  <p>
+    Focuses on speed with minimal runtime checks.
+  </p>
+
+  <!-- LEVEL-3: ReleaseSmall -->
+  <h3 id="releasesmall">ReleaseSmall</h3>
+  <p>
+    Prioritizes binary size, removing or reducing checks and code size.
+  </p>
+
+<!-- LEVEL-2: Stripping Symbols & Minimizing Binary Size -->
+<h2 id="stripping-symbols-and-minimizing-binary-size">Stripping Symbols &amp; Minimizing Binary Size</h2>
+<p>
+  In <code>ReleaseSmall</code> mode, Zig aggressively strips symbols. You can manually strip them with <code>zig strip</code> or 
+  pass flags like <code>-fstrip</code> for minimal binaries.
+</p>
+
+<!-- LEVEL-2: Reproducible Builds -->
+<h2 id="reproducible-builds">Reproducible Builds</h2>
+<p>
+  Zig aims to be reproducible by default, controlling timestamps and ordering. 
+  By limiting external randomness (e.g., build-time environment variables), you can achieve deterministic binaries.
+</p>
+
+
+<!-- 
+  LEVEL-1: Advanced Topics
+-->
+<h1 id="advanced-topics">Advanced Topics</h1>
+
+<!-- LEVEL-2: Using Zig as a Linker -->
+<h2 id="using-zig-as-a-linker">Using Zig as a Linker</h2>
+
+  <!-- LEVEL-3: zig cc, zig c++ commands -->
+  <h3 id="zig-cc-zig-cpp-commands">zig cc, zig c++ commands</h3>
+  <p>
+    Zig can act as a drop-in C/C++ compiler, automatically providing cross-compilation support. 
+    <code>zig cc</code> is Clang under the hood, integrated with Zig’s cross-compilation capabilities.
+  </p>
+
+  <!-- LEVEL-3: Wrapping External Toolchains -->
+  <h3 id="wrapping-external-toolchains">Wrapping External Toolchains</h3>
+  <p>
+    You can use <code>zig cc</code> or <code>zig c++</code> to compile code that expects a normal GCC/Clang environment, 
+    but harness Zig’s cross-compilation to produce binaries for different targets.
+  </p>
+
+<!-- LEVEL-2: Generic Programming -->
+<h2 id="generic-programming">Generic Programming</h2>
+
+  <!-- LEVEL-3: Type Parameters -->
+  <h3 id="type-parameters">Type Parameters</h3>
+  <p>
+    Zig’s generics revolve around <code>comptime</code> parameters that let you write functions or structs 
+    that operate on arbitrary types known at compile time.
+  </p>
+
+  <!-- LEVEL-3: comptime techniques -->
+  <h3 id="comptime-techniques">comptime techniques</h3>
+  <p>
+    <code>@typeInfo</code> introspection, compile-time loops, and function specialization all combine 
+    to create powerful patterns for generic libraries.
+  </p>
+
+<!-- LEVEL-2: Bit Manipulation -->
+<h2 id="bit-manipulation">Bit Manipulation</h2>
+
+  <!-- LEVEL-3: Packed Structs, Bitfields, Endianness -->
+  <h3 id="packed-structs-bitfields-endianness">Packed Structs, Bitfields, Endianness</h3>
+  <p>
+    Zig supports <code>packed</code> structs for tight memory layouts, plus 
+    <code>@intToBytes</code>, <code>@bytesToInt</code>, and <code>@byteSwap</code> to handle endianness. 
+    <code>bitfield</code> syntax helps define fields within a single integer.
+  </p>
+
+<!-- LEVEL-2: Inline Functions & Builtins -->
+<h2 id="inline-functions-and-builtins">Inline Functions &amp; Builtins</h2>
+
+  <!-- LEVEL-3: @import, @sizeOf, @alignOf, @offsetof, etc. -->
+  <h3 id="builtin-functions">@import, @sizeOf, @alignOf, @offsetof, etc.</h3>
+  <p>
+    Zig includes many builtin functions for compile-time reflection and manipulation of types (like <code>@sizeOf</code> and <code>@alignOf</code>). 
+    These can be <code>inline</code>d if needed for performance or clarity.
+  </p>
+
+<!-- LEVEL-2: Performance Tuning -->
+<h2 id="performance-tuning">Performance Tuning</h2>
+
+  <!-- LEVEL-3: Measuring Performance -->
+  <h3 id="measuring-performance">Measuring Performance</h3>
+  <p>
+    Insert timers or counters around critical code sections. You can also compare timing in different build modes.
+  </p>
+
+  <!-- LEVEL-3: Profiling (perf, instruments) -->
+  <h3 id="profiling-tools">Profiling (perf, instruments)</h3>
+  <p>
+    Zig executables can be profiled with typical system profiling tools like <code>perf</code> on Linux or Xcode’s Instruments on macOS.
+  </p>
+
+  <!-- LEVEL-3: Allocation Patterns -->
+  <h3 id="allocation-patterns">Allocation Patterns</h3>
+  <p>
+    Minimizing dynamic allocation or using efficient allocators is often key to achieving high performance in Zig.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Tooling Overview
+-->
+<h1 id="tooling-overview">Tooling Overview</h1>
+<p>
+  In addition to <code>zig build</code>, Zig offers several command-line tools to assist development and integration with C/C++.
+</p>
+
+<!-- LEVEL-2: zig fmt (Formatter) -->
+<h2 id="zig-fmt">zig fmt (Formatter)</h2>
+<p>
+  <code>zig fmt</code> auto-formats your Zig code according to standard style guidelines. 
+  You can apply it on individual files or entire directories.
+</p>
+
+<!-- LEVEL-2: zig translate-c (C to Zig) -->
+<h2 id="zig-translate-c">zig translate-c (C to Zig)</h2>
+<p>
+  Converts C headers or source files into Zig code. This is helpful for bridging with external C APIs. 
+  The generated code often requires manual cleanup or adjustments.
+</p>
+
+<!-- LEVEL-2: zig ast-check (Syntax & Semantic Checks) -->
+<h2 id="zig-ast-check">zig ast-check (Syntax &amp; Semantic Checks)</h2>
+<p>
+  Analyzes Zig source code for errors or warnings without producing a binary, useful for quick checks or IDE integrations.
+</p>
+
+<!-- LEVEL-2: zig targets (List Supported Targets) -->
+<h2 id="zig-targets">zig targets (List Supported Targets)</h2>
+<p>
+  Displays all possible cross-compilation targets supported by your Zig toolchain, including CPU architecture, OS, and ABI.
+</p>
+
+<!-- LEVEL-2: zig env (Environment Info) -->
+<h2 id="zig-env">zig env (Environment Info)</h2>
+<p>
+  Shows the environment configuration, like paths to libc or LLVM. 
+  This can help diagnose issues when cross-compiling or linking external libraries.
+</p>
+
+
+<!-- 
+  LEVEL-1: Documentation Generation
+-->
+<h1 id="documentation-generation">Documentation Generation</h1>
+
+<!-- LEVEL-2: Using zig build docs -->
+<h2 id="using-zig-build-docs">Using zig build docs</h2>
+<p>
+  Zig can automatically generate HTML documentation from your source code.
+</p>
+
+  <!-- LEVEL-3: Generating HTML -->
+  <h3 id="generating-html">Generating HTML</h3>
+  <p>
+    Run <code>zig build docs</code> if your <code>build.zig</code> sets up documentation generation. 
+    It will parse doc comments (<code>///</code>) and produce a browsable site.
+  </p>
+
+  <!-- LEVEL-3: Configuring Output Location -->
+  <h3 id="configuring-output-location">Configuring Output Location</h3>
+  <p>
+    You can specify output paths and other doc parameters in your <code>build.zig</code>. 
+    Refer to <code>std.build.Pkg.addDocumentation</code> for details.
+  </p>
+
+<!-- LEVEL-2: Embedding Comments & Examples -->
+<h2 id="embedding-comments-and-examples">Embedding Comments &amp; Examples</h2>
+<p>
+  Example code blocks within <code>///</code> doc comments can be displayed in generated docs, 
+  making your library usage clearer.
+</p>
+
+  <!-- LEVEL-3: Best Practices for Doc Comments -->
+  <h3 id="best-practices-for-doc-comments">Best Practices for Doc Comments</h3>
+  <ul>
+    <li>Use complete sentences.</li>
+    <li>Show code snippets for typical usage.</li>
+    <li>Document error conditions and safety implications.</li>
+  </ul>
+
+<!-- LEVEL-2: Linking to Standard Library Docs -->
+<h2 id="linking-to-std-lib-docs">Linking to Standard Library Docs</h2>
+<p>
+  In your doc comments, you can provide URLs to Zig’s official stdlib documentation, 
+  or reference other packages if you know the final doc URLs. 
+  This helps readers navigate between your documentation and the standard library.
+</p>
+
+
+<!-- 
+  LEVEL-1: Best Practices & Conventions
+-->
+<h1 id="best-practices-and-conventions">Best Practices &amp; Conventions</h1>
+
+<!-- LEVEL-2: Coding Style -->
+<h2 id="coding-style">Coding Style</h2>
+
+  <!-- LEVEL-3: Naming, Formatting, Module Layout -->
+  <h3 id="naming-formatting-module-layout">Naming, Formatting, Module Layout</h3>
+  <p>
+    Use <code>zig fmt</code> to enforce consistent formatting. 
+    Prefer descriptive file and function names, group related code logically, 
+    and keep module interfaces minimal yet clear.
+  </p>
+
+<!-- LEVEL-2: Memory Safety & Lifetime Management -->
+<h2 id="memory-safety-and-lifetime-management">Memory Safety &amp; Lifetime Management</h2>
+<p>
+  Be explicit about allocations and deallocations. Use <code>defer</code> to avoid leaks. 
+  In debug mode, watch for panic messages indicating out-of-bounds or invalid pointer usage.
+</p>
+
+<!-- LEVEL-2: Error Handling Conventions -->
+<h2 id="error-handling-conventions">Error Handling Conventions</h2>
+<p>
+  Zig’s error union system is explicit. Avoid ignoring errors by using <code>try</code> or <code>catch</code> patterns. 
+  Define meaningful error sets for library APIs.
+</p>
+
+<!-- LEVEL-2: Testing & Continuous Integration -->
+<h2 id="testing-and-continuous-integration">Testing &amp; Continuous Integration</h2>
+<p>
+  Write thorough <code>test</code> blocks to validate each module. 
+  Automate tests in CI environments, building for multiple targets or using <code>zig build test</code>.
+</p>
+
+<!-- LEVEL-2: Contributing to Zig -->
+<h2 id="contributing-to-zig">Contributing to Zig</h2>
+
+  <!-- LEVEL-3: Reporting Issues -->
+  <h3 id="reporting-issues">Reporting Issues</h3>
+  <p>
+    File bug reports and feature requests on Zig’s <a href="https://github.com/ziglang/zig">GitHub repository</a>. 
+    Provide clear steps to reproduce and mention your Zig version.
+  </p>
+
+  <!-- LEVEL-3: Opening Pull Requests -->
+  <h3 id="opening-pull-requests">Opening Pull Requests</h3>
+  <p>
+    Follow the contribution guidelines, style checks, and continuous integration procedures. 
+    Provide tests covering new features or bug fixes.
+  </p>
+
+  <!-- LEVEL-3: Community Resources (Discord, GitHub Discussions) -->
+  <h3 id="community-resources">Community Resources (Discord, GitHub Discussions)</h3>
+  <p>
+    Join <a href="https://discord.gg/zig">Zig’s Discord</a> or check 
+    <a href="https://github.com/ziglang/zig/discussions">GitHub Discussions</a> 
+    for help, announcements, and general discussion.
+  </p>
+
+
+<!-- 
+  LEVEL-1: Further Reading & Resources
+-->
+<h1 id="further-reading-and-resources">Further Reading &amp; Resources</h1>
+
+<!-- LEVEL-2: Official Zig Language Reference -->
+<h2 id="official-zig-language-reference">Official Zig Language Reference</h2>
+<p>
+  The most comprehensive and up-to-date source of information is the 
+  <a href="https://ziglang.org/documentation/master/">Zig Language Reference</a>. 
+  It covers language features, standard library modules, and compiler usage in detail.
+</p>
+
+<!-- LEVEL-2: Zig Community Projects & Packages -->
+<h2 id="zig-community-projects-and-packages">Zig Community Projects &amp; Packages</h2>
+<p>
+  Explore GitHub or <a href="https://zig.pm/">Zig.pm</a> for popular Zig libraries, frameworks, and utilities. 
+  These can often be integrated into your <code>build.zig</code> as dependencies.
+</p>
+
+<!-- LEVEL-2: External Tutorials & Guides -->
+<h2 id="external-tutorials-and-guides">External Tutorials &amp; Guides</h2>
+<p>
+  Numerous tutorials, blog posts, and sample projects exist online. 
+  Check <a href="https://zig.news/">zig.news</a> or community-curated lists for interesting Zig content.
+</p>
+
+<!-- LEVEL-2: Language Internals (Compiler Architecture, IR) -->
+<h2 id="language-internals">Language Internals (Compiler Architecture, IR)</h2>
+<p>
+  If you’re curious about the Zig compiler’s architecture, read through the 
+  <code>src/</code> code in Zig’s GitHub repository or study the ongoing Stage2 development discussions. 
+  Understanding the IR and self-hosted backend can be enlightening for contributors.
+</p>
+
+
+  <!-- ########################################################## -->
+  <!-- end of "main content" area. -->
+  <!-- ########################################################## -->
+
+</div><!-- end #main -->
+
+
+<script src="language_script.js"></script>
+</body>
+</html>
+

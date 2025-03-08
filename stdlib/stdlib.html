@@ -1,0 +1,1458 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Zig Standard Library</title>
+  <link rel="stylesheet" href="stdlib_style.css"> 
+</head>
+<body>
+
+
+<!-- ##################### -->
+<!-- SIDEBAR               -->
+<!-- ##################### -->
+<div id="sidebar">
+  <h3>Table of Contents</h3>
+  <!-- Sidebar nav list -->
+  <ul style="list-style-type:none; padding-left: 0;">
+<li class="level-1"><a href="#std">std</a></li>
+  <li class="level-2"><a href="#annotation">annotation</a></li>
+  <li class="level-2"><a href="#anytype">anytype</a></li>
+  <li class="level-2"><a href="#array_hash_map">array_hash_map</a></li>
+    <li class="level-3"><a href="#array_hash_map-init">array_hash_map.init</a></li>
+    <li class="level-3"><a href="#array_hash_map-get">array_hash_map.get</a></li>
+    <li class="level-3"><a href="#array_hash_map-put">array_hash_map.put</a></li>
+    <li class="level-3"><a href="#array_hash_map-remove">array_hash_map.remove</a></li>
+  <li class="level-2"><a href="#array_list">array_list</a></li>
+    <li class="level-3"><a href="#array_list-init">array_list.init</a></li>
+    <li class="level-3"><a href="#array_list-append">array_list.append</a></li>
+    <li class="level-3"><a href="#array_list-removeatindex">array_list.removeAtIndex</a></li>
+    <li class="level-3"><a href="#array_list-clear">array_list.clear</a></li>
+  <li class="level-2"><a href="#ascii">ascii</a></li>
+    <li class="level-3"><a href="#ascii-isdigit">ascii.isDigit</a></li>
+    <li class="level-3"><a href="#ascii-islower">ascii.isLower</a></li>
+    <li class="level-3"><a href="#ascii-isupper">ascii.isUpper</a></li>
+    <li class="level-3"><a href="#ascii-isspace">ascii.isSpace</a></li>
+  <li class="level-2"><a href="#base64">base64</a></li>
+    <li class="level-3"><a href="#base64-encode">base64.encode</a></li>
+    <li class="level-3"><a href="#base64-decode">base64.decode</a></li>
+  <li class="level-2"><a href="#benchmark">benchmark</a></li>
+    <li class="level-3"><a href="#benchmark-run">benchmark.run</a></li>
+  <li class="level-2"><a href="#binary">binary</a></li>
+    <li class="level-3"><a href="#binary-letobe">binary.leToBe</a></li>
+    <li class="level-3"><a href="#binary-betole">binary.beToLe</a></li>
+  <li class="level-2"><a href="#bit_count">bit_count</a></li>
+    <li class="level-3"><a href="#bit_count-popcount">bit_count.popcount</a></li>
+    <li class="level-3"><a href="#bit_count-clz">bit_count.clz</a></li>
+    <li class="level-3"><a href="#bit_count-ctz">bit_count.ctz</a></li>
+  <li class="level-2"><a href="#bits">bits</a></li>
+    <li class="level-3"><a href="#bits-rotateleft">bits.rotateLeft</a></li>
+    <li class="level-3"><a href="#bits-rotateright">bits.rotateRight</a></li>
+  <li class="level-2"><a href="#block">block</a></li>
+    <li class="level-3"><a href="#block-alloc">block.alloc</a></li>
+    <li class="level-3"><a href="#block-resize">block.resize</a></li>
+    <li class="level-3"><a href="#block-free">block.free</a></li>
+  <li class="level-2"><a href="#blob">blob</a></li>
+    <li class="level-3"><a href="#blob-store">blob.store</a></li>
+    <li class="level-3"><a href="#blob-load">blob.load</a></li>
+  <li class="level-2"><a href="#bool">bool</a></li>
+  <li class="level-2"><a href="#builtin">builtin</a></li>
+    <li class="level-3"><a href="#builtin-arch">builtin.arch</a></li>
+    <li class="level-3"><a href="#builtin-os">builtin.os</a></li>
+    <li class="level-3"><a href="#builtin-abi">builtin.abi</a></li>
+  <li class="level-2"><a href="#build">build</a></li>
+    <li class="level-3"><a href="#builder">Builder</a></li>
+      <li class="level-4"><a href="#builder-init">Builder.init</a></li>
+      <li class="level-4"><a href="#builder-settarget">Builder.setTarget</a></li>
+      <li class="level-4"><a href="#builder-setbuildmode">Builder.setBuildMode</a></li>
+      <li class="level-4"><a href="#builder-getinstallprefix">Builder.getInstallPrefix</a></li>
+      <li class="level-4"><a href="#builder-addexecutable">Builder.addExecutable</a></li>
+        <li class="level-5"><a href="#executable">Executable</a></li>
+          <li class="level-6"><a href="#executable-init">Executable.init</a></li>
+          <li class="level-6"><a href="#executable-addobjectfile">Executable.addObjectFile</a></li>
+          <li class="level-6"><a href="#executable-linksystemlibrary">Executable.linkSystemLibrary</a></li>
+          <li class="level-6"><a href="#executable-linkframework">Executable.linkFramework</a></li>
+      <li class="level-4"><a href="#builder-addlibrary">Builder.addLibrary</a></li>
+        <li class="level-5"><a href="#library">Library</a></li>
+          <li class="level-6"><a href="#library-initstatic">Library.initStatic</a></li>
+          <li class="level-6"><a href="#library-initshared">Library.initShared</a></li>
+      <li class="level-4"><a href="#builder-addsharedlibrary">Builder.addSharedLibrary</a></li>
+      <li class="level-4"><a href="#builder-addstaticlibrary">Builder.addStaticLibrary</a></li>
+      <li class="level-4"><a href="#builder-addtest">Builder.addTest</a></li>
+        <li class="level-5"><a href="#teststep">TestStep</a></li>
+          <li class="level-6"><a href="#teststep-init">TestStep.init</a></li>
+          <li class="level-6"><a href="#teststep-adddependency">TestStep.addDependency</a></li>
+      <li class="level-4"><a href="#builder-addobjectfile">Builder.addObjectFile</a></li>
+        <li class="level-5"><a href="#libexeobjstep">LibExeObjStep</a></li>
+          <li class="level-6"><a href="#libexeobjstep-addobjectfile">LibExeObjStep.addObjectFile</a></li>
+          <li class="level-6"><a href="#libexeobjstep-addlibrarypath">LibExeObjStep.addLibraryPath</a></li>
+          <li class="level-6"><a href="#libexeobjstep-linksystemlibrary">LibExeObjStep.linkSystemLibrary</a></li>
+          <li class="level-6"><a href="#libexeobjstep-linkframework">LibExeObjStep.linkFramework</a></li>
+      <li class="level-4"><a href="#builder-linksystemlibrary">Builder.linkSystemLibrary</a></li>
+      <li class="level-4"><a href="#builder-linkframework">Builder.linkFramework</a></li>
+      <li class="level-4"><a href="#builder-installartifact">Builder.installArtifact</a></li>
+        <li class="level-5"><a href="#installstep">InstallStep</a></li>
+          <li class="level-6"><a href="#installstep-init">InstallStep.init</a></li>
+          <li class="level-6"><a href="#installstep-setpath">InstallStep.setPath</a></li>
+          <li class="level-6"><a href="#installstep-settargetdir">InstallStep.setTargetDir</a></li>
+      <li class="level-4"><a href="#builder-addinstallstep">Builder.addInstallStep</a></li>
+      <li class="level-4"><a href="#builder-addrunstep">Builder.addRunStep</a></li>
+        <li class="level-5"><a href="#runstep">RunStep</a></li>
+          <li class="level-6"><a href="#runstep-init">RunStep.init</a></li>
+          <li class="level-6"><a href="#runstep-addarg">RunStep.addArg</a></li>
+          <li class="level-6"><a href="#runstep-addenv">RunStep.addEnv</a></li>
+      <li class="level-4"><a href="#builder-addcommand">Builder.addCommand</a></li>
+        <li class="level-5"><a href="#command">Command</a></li>
+          <li class="level-6"><a href="#command-init">Command.init</a></li>
+      <li class="level-4"><a href="#builder-overridestdspecialstrings">Builder.overrideStdSpecialStrings</a></li>
+    <li class="level-3"><a href="#step">Step</a></li>
+      <li class="level-4"><a href="#step-init">Step.init</a></li>
+      <li class="level-4"><a href="#step-adddependency">Step.addDependency</a></li>
+      <li class="level-4"><a href="#step-getdependencies">Step.getDependencies</a></li>
+      <li class="level-4"><a href="#step-make">Step.make</a></li>
+      <li class="level-4"><a href="#step-run">Step.run</a></li>
+      <li class="level-4"><a href="#compilestep">CompileStep</a></li>
+        <li class="level-5"><a href="#compilestep-init">CompileStep.init</a></li>
+        <li class="level-5"><a href="#compilestep-setoutputpath">CompileStep.setOutputPath</a></li>
+        <li class="level-5"><a href="#compilestep-addobjectfile">CompileStep.addObjectFile</a></li>
+        <li class="level-5"><a href="#compilestep-addlibrarypath">CompileStep.addLibraryPath</a></li>
+        <li class="level-5"><a href="#compilestep-linksystemlibrary">CompileStep.linkSystemLibrary</a></li>
+        <li class="level-5"><a href="#compilestep-linkframework">CompileStep.linkFramework</a></li>
+      <li class="level-4"><a href="#runstep">RunStep</a></li>
+        <li class="level-5"><a href="#runstep-init">RunStep.init</a></li>
+        <li class="level-5"><a href="#runstep-addarg">RunStep.addArg</a></li>
+        <li class="level-5"><a href="#runstep-addenv">RunStep.addEnv</a></li>
+      <li class="level-4"><a href="#installstep">InstallStep</a></li>
+        <li class="level-5"><a href="#installstep-init">InstallStep.init</a></li>
+        <li class="level-5"><a href="#installstep-setpath">InstallStep.setPath</a></li>
+        <li class="level-5"><a href="#installstep-settargetdir">InstallStep.setTargetDir</a></li>
+      <li class="level-4"><a href="#teststep">TestStep</a></li>
+        <li class="level-5"><a href="#teststep-init">TestStep.init</a></li>
+      <li class="level-4"><a href="#command">Command</a></li>
+        <li class="level-5"><a href="#command-init">Command.init</a></li>
+    <li class="level-3"><a href="#mode">Mode</a></li>
+      <li class="level-4"><a href="#mode-debug">Mode.Debug</a></li>
+      <li class="level-4"><a href="#mode-releasesafe">Mode.ReleaseSafe</a></li>
+      <li class="level-4"><a href="#mode-releasefast">Mode.ReleaseFast</a></li>
+      <li class="level-4"><a href="#mode-releasesmall">Mode.ReleaseSmall</a></li>
+    <li class="level-3"><a href="#library">Library</a></li>
+      <li class="level-4"><a href="#library-initstatic">Library.initStatic</a></li>
+      <li class="level-4"><a href="#library-initshared">Library.initShared</a></li>
+      <li class="level-4"><a href="#library-step">Library.step</a></li>
+    <li class="level-3"><a href="#executable">Executable</a></li>
+      <li class="level-4"><a href="#executable-init">Executable.init</a></li>
+      <li class="level-4"><a href="#executable-step">Executable.step</a></li>
+    <li class="level-3"><a href="#libexeobjstep">LibExeObjStep</a></li>
+      <li class="level-4"><a href="#libexeobjstep-addobjectfile">LibExeObjStep.addObjectFile</a></li>
+      <li class="level-4"><a href="#libexeobjstep-addlibrarypath">LibExeObjStep.addLibraryPath</a></li>
+      <li class="level-4"><a href="#libexeobjstep-linksystemlibrary">LibExeObjStep.linkSystemLibrary</a></li>
+      <li class="level-4"><a href="#libexeobjstep-linkframework">LibExeObjStep.linkFramework</a></li>
+      <li class="level-4"><a href="#libexeobjstep-finalize">LibExeObjStep.finalize</a></li>
+    <li class="level-3"><a href="#dep">Dep</a></li>
+      <li class="level-4"><a href="#dep-init">Dep.init</a></li>
+      <li class="level-4"><a href="#dep-setname">Dep.setName</a></li>
+      <li class="level-4"><a href="#dep-setversionrange">Dep.setVersionRange</a></li>
+      <li class="level-4"><a href="#dep-usepkgconfig">Dep.usePkgConfig</a></li>
+    <li class="level-3"><a href="#pkgconfig">PkgConfig</a></li>
+      <li class="level-4"><a href="#pkgconfig-init">PkgConfig.init</a></li>
+      <li class="level-4"><a href="#pkgconfig-addlibpath">PkgConfig.addLibPath</a></li>
+      <li class="level-4"><a href="#pkgconfig-linksystemlibrary">PkgConfig.linkSystemLibrary</a></li>
+    <li class="level-3"><a href="#options">Options</a></li>
+      <li class="level-4"><a href="#options-parse">Options.parse</a></li>
+      <li class="level-4"><a href="#options-addoption">Options.addOption</a></li>
+      <li class="level-4"><a href="#options-addenumoption">Options.addEnumOption</a></li>
+      <li class="level-4"><a href="#options-addcommand">Options.addCommand</a></li>
+      <li class="level-4"><a href="#options-getoptionvalue">Options.getOptionValue</a></li>
+      <li class="level-4"><a href="#options-getenumoptionvalue">Options.getEnumOptionValue</a></li>
+    <li class="level-3"><a href="#target">Target</a></li>
+      <li class="level-4"><a href="#target-init">Target.init</a></li>
+      <li class="level-4"><a href="#target-native">Target.native</a></li>
+      <li class="level-4"><a href="#target-parse">Target.parse</a></li>
+      <li class="level-4"><a href="#target-cpu_arch">Target.cpu_arch</a></li>
+      <li class="level-4"><a href="#target-os_tag">Target.os_tag</a></li>
+      <li class="level-4"><a href="#target-abi">Target.abi</a></li>
+    <li class="level-3"><a href="#toolchain">Toolchain</a></li>
+      <li class="level-4"><a href="#toolchain-init">Toolchain.init</a></li>
+      <li class="level-4"><a href="#toolchain-linksystemlibrary">Toolchain.linkSystemLibrary</a></li>
+      <li class="level-4"><a href="#toolchain-getccompiler">Toolchain.getCCompiler</a></li>
+    <li class="level-3"><a href="#config">Config</a></li>
+  <li class="level-2"><a href="#cache">cache</a></li>
+    <li class="level-3"><a href="#cache-init">cache.init</a></li>
+    <li class="level-3"><a href="#cache-store">cache.store</a></li>
+    <li class="level-3"><a href="#cache-load">cache.load</a></li>
+  <li class="level-2"><a href="#c_allocator">c_allocator</a></li>
+  <li class="level-2"><a href="#c">c</a></li>
+    <li class="level-3"><a href="#c-errno">c.errno</a></li>
+    <li class="level-3"><a href="#c-stddef">c.stddef</a></li>
+    <li class="level-3"><a href="#c-stdio">c.stdio</a></li>
+  <li class="level-2"><a href="#c_string">c_string</a></li>
+    <li class="level-3"><a href="#c_string-ptr">c_string.ptr</a></li>
+    <li class="level-3"><a href="#c_string-len">c_string.len</a></li>
+  <li class="level-2"><a href="#cmp">cmp</a></li>
+    <li class="level-3"><a href="#cmp-eq">cmp.eq</a></li>
+    <li class="level-3"><a href="#cmp-lt">cmp.lt</a></li>
+    <li class="level-3"><a href="#cmp-gt">cmp.gt</a></li>
+  <li class="level-2"><a href="#comptime">comptime</a></li>
+    <li class="level-3"><a href="#comptime-typeinfo">comptime.typeInfo</a></li>
+    <li class="level-3"><a href="#comptime-typename">comptime.typeName</a></li>
+  <li class="level-2"><a href="#const_list">const_list</a></li>
+    <li class="level-3"><a href="#const_list-init">const_list.init</a></li>
+    <li class="level-3"><a href="#const_list-get">const_list.get</a></li>
+  <li class="level-2"><a href="#convert">convert</a></li>
+    <li class="level-3"><a href="#convert-toint">convert.toInt</a></li>
+    <li class="level-3"><a href="#convert-tofloat">convert.toFloat</a></li>
+  <li class="level-2"><a href="#cpu">cpu</a></li>
+    <li class="level-3"><a href="#cpu-detect">cpu.detect</a></li>
+    <li class="level-3"><a href="#cpu-cache">cpu.cache</a></li>
+  <li class="level-2"><a href="#crypto">crypto</a></li>
+    <li class="level-3"><a href="#crypto-aes">crypto.aes</a></li>
+    <li class="level-3"><a href="#crypto-chacha20">crypto.chacha20</a></li>
+    <li class="level-3"><a href="#crypto-hmac">crypto.hmac</a></li>
+    <li class="level-3"><a href="#crypto-sha1">crypto.sha1</a></li>
+    <li class="level-3"><a href="#crypto-sha2">crypto.sha2</a></li>
+    <li class="level-3"><a href="#crypto-sha3">crypto.sha3</a></li>
+  <li class="level-2"><a href="#dbg">dbg</a></li>
+    <li class="level-3"><a href="#dbg-assert">dbg.assert</a></li>
+  <li class="level-2"><a href="#debug">debug</a></li>
+    <li class="level-3"><a href="#debug-print">debug.print</a></li>
+    <li class="level-3"><a href="#debug-warn">debug.warn</a></li>
+  <li class="level-2"><a href="#dictionary">dictionary</a></li>
+    <li class="level-3"><a href="#dictionary-init">dictionary.init</a></li>
+    <li class="level-3"><a href="#dictionary-get">dictionary.get</a></li>
+  <li class="level-2"><a href="#dynamic_linker">dynamic_linker</a></li>
+  <li class="level-2"><a href="#encoder">encoder</a></li>
+  <li class="level-2"><a href="#event">event</a></li>
+    <li class="level-3"><a href="#event-loop">event.loop</a></li>
+  <li class="level-2"><a href="#fmt">fmt</a></li>
+    <li class="level-3"><a href="#fmt-format">fmt.format</a></li>
+  <li class="level-2"><a href="#fs">fs</a></li>
+    <li class="level-3"><a href="#fs-dir">fs.Dir</a></li>
+      <li class="level-4"><a href="#dir-openfile">Dir.openFile</a></li>
+      <li class="level-4"><a href="#dir-createfile">Dir.createFile</a></li>
+      <li class="level-4"><a href="#dir-createdirectory">Dir.createDirectory</a></li>
+      <li class="level-4"><a href="#dir-walk">Dir.walk</a></li>
+    <li class="level-3"><a href="#fs-file">fs.File</a></li>
+      <li class="level-4"><a href="#file-open">File.open</a></li>
+      <li class="level-4"><a href="#file-read">File.read</a></li>
+      <li class="level-4"><a href="#file-write">File.write</a></li>
+    <li class="level-3"><a href="#fs-path">fs.path</a></li>
+      <li class="level-4"><a href="#path-join">path.join</a></li>
+      <li class="level-4"><a href="#path-basename">path.basename</a></li>
+  <li class="level-2"><a href="#heap">heap</a></li>
+    <li class="level-3"><a href="#heap-arenaallocator">heap.ArenaAllocator</a></li>
+    <li class="level-3"><a href="#heap-fixedbufferallocator">heap.FixedBufferAllocator</a></li>
+  <li class="level-2"><a href="#hook">hook</a></li>
+  <li class="level-2"><a href="#http">http</a></li>
+    <li class="level-3"><a href="#http-headermap">http.HeaderMap</a></li>
+    <li class="level-3"><a href="#http-request">http.Request</a></li>
+    <li class="level-3"><a href="#http-response">http.Response</a></li>
+  <li class="level-2"><a href="#json">json</a></li>
+    <li class="level-3"><a href="#json-parser">json.Parser</a></li>
+    <li class="level-3"><a href="#json-token">json.Token</a></li>
+  <li class="level-2"><a href="#log">log</a></li>
+    <li class="level-3"><a href="#log-info">log.info</a></li>
+    <li class="level-3"><a href="#log-warn">log.warn</a></li>
+    <li class="level-3"><a href="#log-error">log.error</a></li>
+  <li class="level-2"><a href="#make">make</a></li>
+  <li class="level-2"><a href="#math">math</a></li>
+    <li class="level-3"><a href="#math-abs">math.abs</a></li>
+    <li class="level-3"><a href="#math-sqrt">math.sqrt</a></li>
+    <li class="level-3"><a href="#math-sin">math.sin</a></li>
+    <li class="level-3"><a href="#math-cos">math.cos</a></li>
+  <li class="level-2"><a href="#meta">meta</a></li>
+    <li class="level-3"><a href="#meta-trait">meta.trait</a></li>
+    <li class="level-3"><a href="#meta-typeof">meta.TypeOf</a></li>
+    <li class="level-3"><a href="#meta-declptr">meta.declPtr</a></li>
+  <li class="level-2"><a href="#mem">mem</a></li>
+    <li class="level-3"><a href="#mem-copy">mem.copy</a></li>
+    <li class="level-3"><a href="#mem-eql">mem.eql</a></li>
+    <li class="level-3"><a href="#mem-len">mem.len</a></li>
+    <li class="level-3"><a href="#mem-tokenize">mem.tokenize</a></li>
+  <li class="level-2"><a href="#mutex">mutex</a></li>
+  <li class="level-2"><a href="#os">os</a></li>
+    <li class="level-3"><a href="#os-linux">os.linux</a></li>
+    <li class="level-3"><a href="#os-windows">os.windows</a></li>
+    <li class="level-3"><a href="#os-darwin">os.darwin</a></li>
+  <li class="level-2"><a href="#process">process</a></li>
+    <li class="level-3"><a href="#process-spawn">process.spawn</a></li>
+    <li class="level-3"><a href="#process-child">process.Child</a></li>
+  <li class="level-2"><a href="#profiler">profiler</a></li>
+  <li class="level-2"><a href="#ptr">ptr</a></li>
+    <li class="level-3"><a href="#ptr-cast">ptr.cast</a></li>
+    <li class="level-3"><a href="#ptr-offset">ptr.offset</a></li>
+  <li class="level-2"><a href="#random">random</a></li>
+    <li class="level-3"><a href="#random-defaultprng">random.DefaultPrng</a></li>
+    <li class="level-3"><a href="#random-splitmix64">random.splitmix64</a></li>
+  <li class="level-2"><a href="#reflect">reflect</a></li>
+    <li class="level-3"><a href="#reflect-fieldinfo">reflect.fieldInfo</a></li>
+    <li class="level-3"><a href="#reflect-typeinfo">reflect.typeInfo</a></li>
+  <li class="level-2"><a href="#regex">regex</a></li>
+  <li class="level-2"><a href="#run_tests">run_tests</a></li>
+  <li class="level-2"><a href="#sched">sched</a></li>
+  <li class="level-2"><a href="#sha256">sha256</a></li>
+  <li class="level-2"><a href="#sort">sort</a></li>
+    <li class="level-3"><a href="#sort-array">sort.array</a></li>
+  <li class="level-2"><a href="#special">special</a></li>
+    <li class="level-3"><a href="#special-cpu">special.cpu</a></li>
+    <li class="level-3"><a href="#special-fpo">special.fpo</a></li>
+  <li class="level-2"><a href="#sync">sync</a></li>
+    <li class="level-3"><a href="#sync-mutex">sync.Mutex</a></li>
+    <li class="level-3"><a href="#sync-atomicbool">sync.AtomicBool</a></li>
+  <li class="level-2"><a href="#testing">testing</a></li>
+    <li class="level-3"><a href="#testing-expect">testing.expect</a></li>
+    <li class="level-3"><a href="#testing-expecterror">testing.expectError</a></li>
+  <li class="level-2"><a href="#thread">thread</a></li>
+    <li class="level-3"><a href="#thread-spawn">thread.spawn</a></li>
+    <li class="level-3"><a href="#thread-join">thread.join</a></li>
+  <li class="level-2"><a href="#time">time</a></li>
+    <li class="level-3"><a href="#time-duration">time.Duration</a></li>
+    <li class="level-3"><a href="#time-timestamp">time.Timestamp</a></li>
+    <li class="level-3"><a href="#time-parse">time.parse</a></li>
+  <li class="level-2"><a href="#tz">tz</a></li>
+  <li class="level-2"><a href="#utf8">utf8</a></li>
+    <li class="level-3"><a href="#utf8-validate">utf8.validate</a></li>
+  <li class="level-2"><a href="#unicode">unicode</a></li>
+  <li class="level-2"><a href="#uuid">uuid</a></li>
+  <li class="level-2"><a href="#xoroshiro">xoroshiro</a></li>
+  <li class="level-2"><a href="#zig">zig</a></li>
+    <li class="level-3"><a href="#zig-bootstrap">zig.bootstrap</a></li>
+    <li class="level-3"><a href="#zig-translate_c">zig.translate_c</a></li>
+  <li class="level-2"><a href="#zip">zip</a></li>
+  <li class="level-2"><a href="#zlib">zlib</a></li>
+  </ul>
+</div>
+<!-- ##################### -->
+<!--  END OF SIDEBAR       -->
+<!-- ##################### -->
+
+
+<!-- TOGGLE BAR -->
+<div id="toggle-bar">
+  <span id="toggle-symbol"><</span>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- Top Nav Bar -->
+  <div class="top-nav">
+
+    <!-- Left side: Nav Buttons -->
+    <div class="nav-buttons">
+      <!-- "Zig Language" leads to language.html -->
+      <button class="nav-button" type="button" onclick="window.location.href='../language/language.html'">Zig Language</button>
+
+      <!-- "Standard Library" is grayed out or 'current' because we are on this page. -->
+      <button class="nav-button current" type="button">Zig Standard Library </button>
+           
+      <!-- "Examples" leads to examples.html -->
+      <button class="nav-button" type="button" onclick="window.location.href='../examples/examples.html'">
+        Zig Examples
+      </button>
+    </div>  <!-- end Nav buttons  -->
+
+    <!-- Right side: Theme Selector -->
+    <div class="style-selector-container">
+      <label for="theme-switcher">Theme:</label>
+      <select id="theme-switcher">
+        <option value="serene_blues">Serene Blues</option>
+        <option value="muted_greens">Muted Greens</option>
+        <option value="soft_earth_tones">Soft Earth Tones</option>
+        <option value="modern_grayscale">Modern Grayscale</option>
+        <option value="lemon_daydream">Lemon Daydream</option>
+        <option value="lilac_mist">Lilac Mist</option>
+        <option value="apricot_sunset">Apricot Sunset</option>
+        <option value="neon_noir">Neon Noir</option>
+        <option value="police_mode">PULL OVER, BUDDY!</option>
+      </select>
+    </div>
+  </div><!-- end .top-nav -->
+
+
+  <!-- ########################################################## -->
+  <!--  Text for "main content" goes here.  --> 
+  <!-- ########################################################## -->  
+
+
+<h1> Zig Standard Library </h1>
+
+<!-- std -->
+<section id="std">
+    <h2>std</h2>
+    <p><strong>Description:</strong> The root of Zig’s standard library, providing core language facilities and modules.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    std.debug.print("Hello from std!\n", .{});
+}
+</code></pre>
+</section>
+
+<!-- annotation -->
+<section id="annotation">
+    <h2>annotation</h2>
+    <p><strong>Description:</strong> Provides metadata or annotation utilities for language structures.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const annotation = std.annotation;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>// Hypothetical usage:
+// annotation.someFunction(value);
+</code></pre>
+</section>
+
+<!-- anytype -->
+<section id="anytype">
+    <h2>anytype</h2>
+    <p><strong>Description:</strong> Represents Zig's generic “any type,” often used in compile-time reflection.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const anytype = std.anytype;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>fn exampleFn(comptime T: anytype) void {
+    // ...
+}
+</code></pre>
+</section>
+
+<!-- array_hash_map -->
+<section id="array_hash_map">
+    <h2>array_hash_map</h2>
+    <p><strong>Description:</strong> A hash map stored with arrays, providing key-value storage.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const ArrayHashMap = std.array_hash_map.ArrayHashMap;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var map = ArrayHashMap(u32, bool).init(std.heap.page_allocator);
+    try map.put(42, true);
+    const val = map.get(42) orelse false;
+    std.debug.print("Value: {}\n", .{val});
+}
+</code></pre>
+</section>
+
+<!-- array_list -->
+<section id="array_list">
+    <h2>array_list</h2>
+    <p><strong>Description:</strong> A dynamically growable array container.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const ArrayList = std.array_list.ArrayList;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var list = ArrayList(u8).init(std.heap.page_allocator);
+    try list.append(97); // 'a'
+    std.debug.print("First item: {c}\n", .{list.items[0]});
+}
+</code></pre>
+</section>
+
+<!-- ascii -->
+<section id="ascii">
+    <h2>ascii</h2>
+    <p><strong>Description:</strong> Provides functions for checking and manipulating ASCII characters.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const ascii = std.ascii;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    if (std.ascii.isDigit('5')) {
+        std.debug.print("'5' is a digit.\n", .{});
+    }
+}
+</code></pre>
+</section>
+
+<!-- base64 -->
+<section id="base64">
+    <h2>base64</h2>
+    <p><strong>Description:</strong> Encodes and decodes data using Base64.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const base64 = std.base64;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() !void {
+    const encoded = base64.encode("Hello");
+    std.debug.print("Encoded: {s}\n", .{encoded});
+}
+</code></pre>
+</section>
+
+<!-- benchmark -->
+<section id="benchmark">
+    <h2>benchmark</h2>
+    <p><strong>Description:</strong> Offers functionality to measure execution speed and time of code blocks.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const benchmark = std.benchmark;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>benchmark.run("myBench", fn (_: void) void {
+    // code to measure
+});
+</code></pre>
+</section>
+
+<!-- binary -->
+<section id="binary">
+    <h2>binary</h2>
+    <p><strong>Description:</strong> Provides endianness conversions and binary data helpers.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const binary = std.binary;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    const beValue = std.binary.leToBe(u16, 0x1234);
+    std.debug.print("Big-endian: 0x{x}\n", .{beValue});
+}
+</code></pre>
+</section>
+
+<!-- bit_count -->
+<section id="bit_count">
+    <h2>bit_count</h2>
+    <p><strong>Description:</strong> Operations for counting or locating bits (popcount, clz, ctz).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const bit_count = std.bit_count;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    const x = bit_count.popcount(0b1011);
+    std.debug.print("Popcount is {}\n", .{x});
+}
+</code></pre>
+</section>
+
+<!-- bits -->
+<section id="bits">
+    <h2>bits</h2>
+    <p><strong>Description:</strong> Provides bitwise utilities such as rotate left or right.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const bits = std.bits;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    const rotated = bits.rotateLeft(u8, 0x81, 1);
+    std.debug.print("Rotated: 0x{x}\n", .{rotated});
+}
+</code></pre>
+</section>
+
+<!-- block -->
+<section id="block">
+    <h2>block</h2>
+    <p><strong>Description:</strong> Manages blocks of memory for allocation, resizing, and freeing.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const block = std.block;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>var blk = block.alloc(std.heap.page_allocator, 1024);
+block.resize(std.heap.page_allocator, &blk, 2048);
+// ...
+block.free(std.heap.page_allocator, &blk);
+</code></pre>
+</section>
+
+<!-- blob -->
+<section id="blob">
+    <h2>blob</h2>
+    <p><strong>Description:</strong> Stores and loads raw binary data (a “blob”).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const blob = std.blob;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>blob.store(...);
+blob.load(...);
+</code></pre>
+</section>
+
+<!-- bool -->
+<section id="bool">
+    <h2>bool</h2>
+    <p><strong>Description:</strong> Implements the standard Boolean type and related functionality.</p>
+    <h3>Syntax</h3>
+    <pre><code>// Built-in bool type, or:
+const std = @import("std");
+const bool = std.bool;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>pub fn main() void {
+    const flag: bool = true;
+    if (flag) {
+        // ...
+    }
+}
+</code></pre>
+</section>
+
+<!-- builtin -->
+<section id="builtin">
+    <h2>builtin</h2>
+    <p><strong>Description:</strong> Provides compile-time builtins and environment details (architecture, OS, etc.).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const builtin = std.builtin;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    std.debug.print("Current OS: {}\n", .{std.builtin.os});
+}
+</code></pre>
+</section>
+
+<!-- build -->
+<section id="build">
+    <h2>build</h2>
+    <p><strong>Description:</strong> Contains functions and types for building Zig projects programmatically.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const build = std.build;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    var builder = build.Builder.init(std.heap.page_allocator);
+    // Configure builder...
+}
+</code></pre>
+</section>
+
+<!-- cache -->
+<section id="cache">
+    <h2>cache</h2>
+    <p><strong>Description:</strong> Offers mechanisms to cache data persistently.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const cache = std.cache;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>cache.store("key", someData);
+const loaded = cache.load("key");
+</code></pre>
+</section>
+
+<!-- c_allocator -->
+<section id="c_allocator">
+    <h2>c_allocator</h2>
+    <p><strong>Description:</strong> Wraps the C allocator interface for interoperability.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const c_allocator = std.c_allocator;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const alloc = c_allocator; // standard C malloc/free
+</code></pre>
+</section>
+
+<!-- c -->
+<section id="c">
+    <h2>c</h2>
+    <p><strong>Description:</strong> Contains C standard library bindings.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const c = std.c;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const errno = c.errno.getErrno();
+</code></pre>
+</section>
+
+<!-- c_string -->
+<section id="c_string">
+    <h2>c_string</h2>
+    <p><strong>Description:</strong> Helpers for working with null-terminated C strings in Zig.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const c_string = std.c_string;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>pub fn main() void {
+    const s = "Hello\0";
+    const length = c_string.len(s);
+}
+</code></pre>
+</section>
+
+<!-- cmp -->
+<section id="cmp">
+    <h2>cmp</h2>
+    <p><strong>Description:</strong> Provides comparison utilities (equality, less-than, greater-than).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const cmp = std.cmp;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>if (cmp.eq("abc", "abc")) {
+    // Strings match
+}
+</code></pre>
+</section>
+
+<!-- comptime -->
+<section id="comptime">
+    <h2>comptime</h2>
+    <p><strong>Description:</strong> Houses utilities for compile-time operations and reflection.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const comptime = std.comptime;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>pub fn exampleFn() comptime {
+    const info = comptime.typeInfo(@TypeOf(123));
+    // ...
+}
+</code></pre>
+</section>
+
+<!-- const_list -->
+<section id="const_list">
+    <h2>const_list</h2>
+    <p><strong>Description:</strong> Manages a compile-time list-like structure.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const const_list = std.const_list;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>var list = const_list.init(.{1, 2, 3});
+const val = list.get(1);
+</code></pre>
+</section>
+
+<!-- convert -->
+<section id="convert">
+    <h2>convert</h2>
+    <p><strong>Description:</strong> Converts between numeric types (to int, float, etc.).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const convert = std.convert;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const x = convert.toInt(f64, 42.0);
+</code></pre>
+</section>
+
+<!-- cpu -->
+<section id="cpu">
+    <h2>cpu</h2>
+    <p><strong>Description:</strong> Provides CPU-specific checks and feature detection.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const cpu = std.cpu;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const info = cpu.detect();
+</code></pre>
+</section>
+
+<!-- crypto -->
+<section id="crypto">
+    <h2>crypto</h2>
+    <p><strong>Description:</strong> Implements cryptographic functions (AES, SHA, etc.).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const crypto = std.crypto;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    var sha256 = crypto.sha2.sha256();
+    sha256.update("data");
+    const hash = sha256.final();
+    std.debug.print("SHA256: {x}\n", .{hash});
+}
+</code></pre>
+</section>
+
+<!-- dbg -->
+<section id="dbg">
+    <h2>dbg</h2>
+    <p><strong>Description:</strong> Provides debug utilities like <code>dbg.assert</code>.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const dbg = std.dbg;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>dbg.assert(2 + 2 == 4);
+</code></pre>
+</section>
+
+<!-- debug -->
+<section id="debug">
+    <h2>debug</h2>
+    <p><strong>Description:</strong> Offers printing and warning facilities for debugging.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const debug = std.debug;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>debug.print("Debug info: {s}\n", .{"message"});
+</code></pre>
+</section>
+
+<!-- dictionary -->
+<section id="dictionary">
+    <h2>dictionary</h2>
+    <p><strong>Description:</strong> A simpler key-value storage mechanism.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const dictionary = std.dictionary;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>var dict = dictionary.init(...);
+dict.get("key");
+</code></pre>
+</section>
+
+<!-- dynamic_linker -->
+<section id="dynamic_linker">
+    <h2>dynamic_linker</h2>
+    <p><strong>Description:</strong> Interacts with the system’s dynamic linker for loading libraries at runtime.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const dynamic_linker = std.dynamic_linker;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const handle = try dynamic_linker.open("libexample.so");
+</code></pre>
+</section>
+
+<!-- encoder -->
+<section id="encoder">
+    <h2>encoder</h2>
+    <p><strong>Description:</strong> Provides abstractions for encoding (base64, hex, etc.).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const encoder = std.encoder;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const encoded = encoder.hex.encode("Hello");
+</code></pre>
+</section>
+
+<!-- event -->
+<section id="event">
+    <h2>event</h2>
+    <p><strong>Description:</strong> Deals with event loops and asynchronous I/O.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const event = std.event;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>var el = event.loop.init(std.heap.page_allocator);
+</code></pre>
+</section>
+
+<!-- fmt -->
+<section id="fmt">
+    <h2>fmt</h2>
+    <p><strong>Description:</strong> Functions for formatting data as strings.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const fmt = std.fmt;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    var buffer: [50]u8 = undefined;
+    const len = std.fmt.format(buffer[0..], "Hello, {}!", .{"Zig"});
+    std.debug.print("{s}\n", .{buffer[0..len]});
+}
+</code></pre>
+</section>
+
+<!-- fs -->
+<section id="fs">
+    <h2>fs</h2>
+    <p><strong>Description:</strong> Offers file system access, including files, directories, and paths.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const fs = std.fs;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() !void {
+    const file = try fs.cwd().openFile("test.txt", .{});
+    defer file.close();
+}
+</code></pre>
+</section>
+
+<!-- heap -->
+<section id="heap">
+    <h2>heap</h2>
+    <p><strong>Description:</strong> Contains allocators built on the heap (ArenaAllocator, FixedBufferAllocator, etc.).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const heap = std.heap;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var arena = heap.ArenaAllocator.init(std.heap.page_allocator);
+    const allocator = arena.allocator();
+    // use allocator...
+}
+</code></pre>
+</section>
+
+<!-- hook -->
+<section id="hook">
+    <h2>hook</h2>
+    <p><strong>Description:</strong> A placeholder for hooking into certain events or points in Zig code.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const hook = std.hook;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>// Hypothetical usage:
+hook.addEventHandler(...);
+</code></pre>
+</section>
+
+<!-- http -->
+<section id="http">
+    <h2>http</h2>
+    <p><strong>Description:</strong> Provides HTTP request/response handling and header management.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const http = std.http;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>var req = http.Request.init(...);
+var resp = http.Response.init(...);
+</code></pre>
+</section>
+
+<!-- json -->
+<section id="json">
+    <h2>json</h2>
+    <p><strong>Description:</strong> Parses and handles JSON data.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const json = std.json;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var parser = json.Parser.init();
+    try parser.parse("{\"name\":\"Zig\"}");
+    // ...
+}
+</code></pre>
+</section>
+
+<!-- log -->
+<section id="log">
+    <h2>log</h2>
+    <p><strong>Description:</strong> Logging utilities with different severity levels (info, warn, error).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const log = std.log;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>log.info("This is an info log.", .{});
+</code></pre>
+</section>
+
+<!-- make -->
+<section id="make">
+    <h2>make</h2>
+    <p><strong>Description:</strong> Provides “makefile”-like functionalities for builds or tasks.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const make = std.make;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>// Hypothetical usage:
+make.run(...);
+</code></pre>
+</section>
+
+<!-- math -->
+<section id="math">
+    <h2>math</h2>
+    <p><strong>Description:</strong> Supplies mathematical functions (abs, sqrt, sin, cos, etc.).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const math = std.math;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    const val = math.sqrt(9.0);
+    std.debug.print("Result: {}\n", .{val});
+}
+</code></pre>
+</section>
+
+<!-- meta -->
+<section id="meta">
+    <h2>meta</h2>
+    <p><strong>Description:</strong> Compile-time reflection utilities (traits, type checks, etc.).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const meta = std.meta;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    const typeName = meta.typeName(@TypeOf(123));
+    std.debug.print("Type is: {s}\n", .{typeName});
+}
+</code></pre>
+</section>
+
+<!-- mem -->
+<section id="mem">
+    <h2>mem</h2>
+    <p><strong>Description:</strong> Functions for memory operations like copy, compare, tokenize.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const mem = std.mem;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    var buffer: [5]u8 = .{0} ** 5;
+    mem.copy(u8, buffer[0..], "Hello");
+    std.debug.print("{s}\n", .{buffer});
+}
+</code></pre>
+</section>
+
+<!-- mutex -->
+<section id="mutex">
+    <h2>mutex</h2>
+    <p><strong>Description:</strong> Provides mutual exclusion primitives for concurrency.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const mutex = std.mutex;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>var mtx = mutex.Mutex{};
+mtx.lock();
+// critical section
+mtx.unlock();
+</code></pre>
+</section>
+
+<!-- os -->
+<section id="os">
+    <h2>os</h2>
+    <p><strong>Description:</strong> OS-specific functionality (linux, windows, darwin).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const os = std.os;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>// Example usage:
+const platform = os.linux; // or windows, etc.
+</code></pre>
+</section>
+
+<!-- process -->
+<section id="process">
+    <h2>process</h2>
+    <p><strong>Description:</strong> Allows spawning and managing child processes.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const process = std.process;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var child = try process.spawn(.{ .argv = &[_][]const u8{"echo", "Hello", null} });
+    const status = try child.wait();
+}
+</code></pre>
+</section>
+
+<!-- profiler -->
+<section id="profiler">
+    <h2>profiler</h2>
+    <p><strong>Description:</strong> Hooks for performance profiling (implementation-dependent).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const profiler = std.profiler;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>profiler.start();
+profiler.stop();
+</code></pre>
+</section>
+
+<!-- ptr -->
+<section id="ptr">
+    <h2>ptr</h2>
+    <p><strong>Description:</strong> Contains pointer utilities, such as casting and offset calculations.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const ptr = std.ptr;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const newPtr = ptr.cast(*const u8, somePointer);
+</code></pre>
+</section>
+
+<!-- random -->
+<section id="random">
+    <h2>random</h2>
+    <p><strong>Description:</strong> Provides random number generators (DefaultPrng, splitmix64, etc.).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const random = std.random;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    var rng = random.DefaultPrng.init(1234);
+    const val = rng.rand(u32);
+    std.debug.print("Random: {}\n", .{val});
+}
+</code></pre>
+</section>
+
+<!-- reflect -->
+<section id="reflect">
+    <h2>reflect</h2>
+    <p><strong>Description:</strong> Enables reflecting on types at compile time.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const reflect = std.reflect;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const fi = reflect.fieldInfo(@TypeOf(SomeStruct), 0);
+</code></pre>
+</section>
+
+<!-- regex -->
+<section id="regex">
+    <h2>regex</h2>
+    <p><strong>Description:</strong> Regular expression support (pattern matching).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const regex = std.regex;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>var re = try regex.compile("hello");
+_ = re.match("hello world");
+</code></pre>
+</section>
+
+<!-- run_tests -->
+<section id="run_tests">
+    <h2>run_tests</h2>
+    <p><strong>Description:</strong> Utility for running Zig tests (mainly via <code>zig test</code> command).</p>
+    <h3>Syntax</h3>
+    <pre><code>// Typically used with `zig test` command.
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>test "example test" {
+    // ...
+}
+</code></pre>
+</section>
+
+<!-- sched -->
+<section id="sched">
+    <h2>sched</h2>
+    <p><strong>Description:</strong> Scheduling utilities (not often used directly).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const sched = std.sched;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>// Hypothetical usage:
+sched.spawn(...);
+</code></pre>
+</section>
+
+<!-- sha256 -->
+<section id="sha256">
+    <h2>sha256</h2>
+    <p><strong>Description:</strong> A legacy name for SHA-256 hashing (often replaced by <code>std.crypto</code>).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const sha256 = std.sha256;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>var hasher = sha256.init();
+hasher.update("data");
+const hash = hasher.final();
+</code></pre>
+</section>
+
+<!-- sort -->
+<section id="sort">
+    <h2>sort</h2>
+    <p><strong>Description:</strong> Sorting algorithms for arrays and slices.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const sort = std.sort;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>var arr = [_]u32{3, 1, 2};
+sort.array(u32, arr[0..], std.cmp.lt);
+</code></pre>
+</section>
+
+<!-- special -->
+<section id="special">
+    <h2>special</h2>
+    <p><strong>Description:</strong> Contains internal or “special” APIs (like CPU or FPO specifics).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const special = std.special;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>special.cpu(...);
+special.fpo(...);
+</code></pre>
+</section>
+
+<!-- sync -->
+<section id="sync">
+    <h2>sync</h2>
+    <p><strong>Description:</strong> Synchronization utilities (Mutex, AtomicBool, etc.).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const sync = std.sync;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const flag = sync.AtomicBool.init(false);
+if (!flag.loadOrder(std.atomic.Order.Acquire)) {
+    flag.store(true, std.atomic.Order.Release);
+}
+</code></pre>
+</section>
+
+<!-- testing -->
+<section id="testing">
+    <h2>testing</h2>
+    <p><strong>Description:</strong> Provides assertions and test helpers (<code>expect</code>, <code>expectError</code>, etc.).</p>
+    <h3>Syntax</h3>
+    <pre><code>test "example test" {
+    std.testing.expect(true);
+}
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>test "verify addition" {
+    std.testing.expect(2 + 2 == 4);
+}
+</code></pre>
+</section>
+
+<!-- thread -->
+<section id="thread">
+    <h2>thread</h2>
+    <p><strong>Description:</strong> Allows creating and managing threads (spawn, join).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const thread = std.thread;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+fn worker() void {
+    // Work...
+}
+
+pub fn main() void {
+    var t = thread.spawn(worker);
+    thread.join(t);
+}
+</code></pre>
+</section>
+
+<!-- time -->
+<section id="time">
+    <h2>time</h2>
+    <p><strong>Description:</strong> Deals with durations, timestamps, and time parsing.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const time = std.time;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const std = @import("std");
+
+pub fn main() void {
+    const start = time.timestamp();
+    // do something
+    const end = time.timestamp();
+    std.debug.print("Elapsed: {}ns\n", .{end - start});
+}
+</code></pre>
+</section>
+
+<!-- tz -->
+<section id="tz">
+    <h2>tz</h2>
+    <p><strong>Description:</strong> Time zone and related functionality (less commonly used).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const tz = std.tz;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>tz.getLocalTimeZone();
+</code></pre>
+</section>
+
+<!-- utf8 -->
+<section id="utf8">
+    <h2>utf8</h2>
+    <p><strong>Description:</strong> Validates and handles UTF-8 encoded text.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const utf8 = std.utf8;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>if (utf8.validate("Hello")) {
+    // valid UTF-8
+}
+</code></pre>
+</section>
+
+<!-- unicode -->
+<section id="unicode">
+    <h2>unicode</h2>
+    <p><strong>Description:</strong> Provides Unicode utilities (less used than <code>utf8</code>).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const unicode = std.unicode;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const codepoint = unicode.utf8DecodeOne("α");
+</code></pre>
+</section>
+
+<!-- uuid -->
+<section id="uuid">
+    <h2>uuid</h2>
+    <p><strong>Description:</strong> Generates and manipulates UUIDs (Universally Unique Identifiers).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const uuid = std.uuid;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>const new_uuid = uuid.v4();
+</code></pre>
+</section>
+
+<!-- xoroshiro -->
+<section id="xoroshiro">
+    <h2>xoroshiro</h2>
+    <p><strong>Description:</strong> Implements the Xoroshiro random number generator family.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const xoroshiro = std.xoroshiro;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>var rng = xoroshiro.Xoroshiro128PlusPlus.init(1234);
+const random_num = rng.next();
+</code></pre>
+</section>
+
+<!-- zig -->
+<section id="zig">
+    <h2>zig</h2>
+    <p><strong>Description:</strong> Contains Zig-specific utilities (bootstrap, translate_c, etc.).</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const zig = std.zig;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>zig.translate_c(...);
+</code></pre>
+</section>
+
+<!-- zip -->
+<section id="zip">
+    <h2>zip</h2>
+    <p><strong>Description:</strong> Provides functionality to work with .zip archives.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const zip = std.zip;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>// Hypothetical usage:
+zip.createArchive(...);
+zip.extractArchive(...);
+</code></pre>
+</section>
+
+<!-- zlib -->
+<section id="zlib">
+    <h2>zlib</h2>
+    <p><strong>Description:</strong> Offers compression/decompression using the zlib format.</p>
+    <h3>Syntax</h3>
+    <pre><code>const std = @import("std");
+const zlib = std.zlib;
+</code></pre>
+    <h3>Example</h3>
+    <pre><code>var compressed = zlib.compress(data);
+var original = zlib.decompress(compressed);
+</code></pre>
+</section>
+
+</div><!-- end #main -->
+
+  <!-- ########################################################## -->
+  <!--  End of text for "main content"                            --> 
+  <!-- ########################################################## -->  
+
+
+<script src="stdlib_script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+

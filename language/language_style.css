@@ -1,0 +1,219 @@
+
+
+/* -----------------------
+   :root for CSS Variables
+----------------------- */
+:root {
+  /* Provide default values */
+  --body-bg: #ffffff;
+  --text-color: #000000;
+  --sidebar-bg: #f9f9f9;
+  --button-bg: #eeeeee;
+  --button-text-color: #000000;
+  --button-hover: #dddddd;
+  --button-current: #cccccc;
+}
+
+/* -----------------------
+   Basic Reset 
+----------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  background-color: var(--body-bg); /* Use our variable */
+  color: var(--text-color);         /* Use our variable */
+}
+
+/* -----------------------
+   SIDEBAR 
+----------------------- */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 100vh; 
+  overflow-y: auto;
+  background-color: var(--sidebar-bg); /* Use our variable */
+  border-right: 1px solid #ccc;
+  transition: width 0.3s ease;
+  padding: 10px;
+  padding-top: 5em;
+}
+
+
+/* Indentation of sidebar list items. */
+#sidebar .level-1 { margin-left: 0; }
+#sidebar .level-2 { margin-left: 2em; }
+#sidebar .level-3 { margin-left: 4em; }
+
+/* When closed */
+#sidebar.closed {
+  width: 0;
+  padding: 0;
+}
+
+/* -----------------------
+   TOGGLE BAR 
+----------------------- */
+#toggle-bar {
+  position: fixed;
+  top: 0;
+  left: 300px; 
+  width: 20px;
+  height: 100vh;
+  background-color: #ccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: left 0.3s ease;
+}
+#toggle-bar.closed {
+  left: 0;
+}
+#toggle-symbol {
+  font-size: 18px;
+  font-weight: bold;
+  user-select: none;
+}
+
+/* -----------------------
+   MAIN CONTENT 
+----------------------- */
+#main {
+  position: relative;
+  overflow-y: auto;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+  padding: 20px;
+  padding-right: 20px; /* Adjust as needed */
+  box-sizing: border-box; /* So the padding doesn't shrink the area */
+  margin-left: 320px; /* default margin when sidebar is open (300 + 20) */
+  margin-top: 60px;   /* Adjust for top-nav height */
+}
+#main.closed {
+  margin-left: 40px; /* 20px toggle bar + some space */
+}
+
+/* -----------------------
+   HEADINGS 
+----------------------- */
+h1, h2 {
+  margin-top: 1em;
+}
+
+/* -----------------------
+   .top-nav
+----------------------- */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #eee;
+  padding: 10px;
+  z-index: 999;
+
+  /* Ensure nav buttons and style selector are on the same row */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* A container just for the nav buttons if you want to group them specifically */
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Basic styling for nav buttons */
+.nav-button {
+  padding: 0.5em 1em;
+  background-color: var(--button-bg);     /* variable */
+  color: var(--button-text-color);        /* variable */
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 1rem;
+}
+.nav-button:hover {
+  background-color: var(--button-hover);  /* variable */
+}
+.nav-button.current {
+  background-color: var(--button-current); /* variable */
+  color: #666;
+  cursor: default; /* not clickable */
+}
+
+/* -----------------------
+   Style Selector
+----------------------- */
+.style-selector-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Label and select styling */
+.style-selector-container label {
+  font-size: 1rem;
+  font-weight: bold;
+}
+.style-selector-container select {
+  padding: 5px;
+  font-size: 1rem;
+}
+
+
+/* -----------------------------------------------
+   Keyframe for police lights style:  
+   alternate between red and blue every second. 
+----------------------------------------------- */
+/* Body goes Red → Blue → Red */
+@keyframes police-lights-body {
+  0% {
+    background-color: red;
+  }
+  50% {
+    background-color: blue;
+  }
+  100% {
+    background-color: red;
+  }
+}
+
+/* Sidebar goes Blue → Red → Blue */
+@keyframes police-lights-sidebar {
+  0% {
+    background-color: blue;
+  }
+  50% {
+    background-color: red;
+  }
+  100% {
+    background-color: blue;
+  }
+}
+
+
+/* Apply the animations. */ 
+body.police-mode {
+  animation: police-lights-body 1s infinite linear;
+}
+
+body.police-mode #sidebar {
+  animation: police-lights-sidebar 1s infinite linear;
+}
+
+
+
+
+
+

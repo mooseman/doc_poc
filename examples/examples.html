@@ -1,0 +1,1902 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Zig Examples</title>
+  <link rel="stylesheet" href="examples_style.css"> 
+</head>
+<body>
+
+<!-- Start of SIDEBAR -->
+<div id="sidebar">
+  <h3>Table of Contents</h3>
+  <!-- Sidebar nav list -->
+  <ul style="list-style-type:none; padding-left: 0;">
+
+    <!-- LANGUAGE BASICS EXAMPLES -->
+    <li class="level-1"><a href="#language-basics-examples">Language Basics Examples</a></li>
+      <li class="level-2"><a href="#variables-and-constants-examples">Variables and Constants</a></li>
+        <li class="level-3"><a href="#var-vs-const-examples">var vs. const</a></li>
+        <li class="level-3"><a href="#block-scopes-examples">Block Scopes</a></li>
+        <li class="level-3"><a href="#shadowing-examples">Shadowing</a></li>
+      <li class="level-2"><a href="#naming-conventions-examples">Naming Conventions</a></li>
+        <li class="level-3"><a href="#identifiers-and-style-examples">Identifiers &amp; Style</a></li>
+        <li class="level-3"><a href="#module-file-names-examples">Module / File Names</a></li>
+      <li class="level-2"><a href="#comments-and-docs-examples">Comments and Documentation</a></li>
+        <li class="level-3"><a href="#single-multi-line-comments-examples">Single-line &amp; Multi-line Comments</a></li>
+        <li class="level-3"><a href="#doc-comments-examples">Doc Comments (///)</a></li>
+      <li class="level-2"><a href="#code-organization-examples">Code Organization</a></li>
+        <li class="level-3"><a href="#files-and-modules-examples">Files &amp; Modules</a></li>
+        <li class="level-3"><a href="#package-imports-examples">Package Imports (@import, relative/absolute paths)</a></li>
+
+    <!-- DATA TYPES EXAMPLES -->
+    <li class="level-1"><a href="#data-types-examples">Data Types Examples</a></li>
+      <li class="level-2"><a href="#primitive-types-examples">Primitive Types</a></li>
+        <li class="level-3"><a href="#integers-examples">Integers (Signed/Unsigned, comptime_int)</a></li>
+        <li class="level-3"><a href="#floating-point-examples">Floating-Point (f16, f32, f64, comptime_float)</a></li>
+        <li class="level-3"><a href="#booleans-examples">Booleans</a></li>
+        <li class="level-3"><a href="#characters-examples">Characters (u8 code points)</a></li>
+      <li class="level-2"><a href="#compound-types-examples">Compound Types</a></li>
+        <li class="level-3"><a href="#arrays-and-slices-examples">Arrays &amp; Slices</a></li>
+        
+        <!-- STRING HANDLING: MULTIPLE EXAMPLES -->
+        <li class="level-1"><a href="#strings-examples">Strings</a>        
+        <li class="level-2"><a href="#string-example-1-basic-literal">String Example #1: Basic Literal</a></li>
+        <li class="level-2"><a href="#string-example-2-concatenation">String Example #2: Concatenation</a></li>
+        <li class="level-2"><a href="#string-example-3-formatting">String Example #3: Formatting</a></li>
+        <li class="level-2"><a href="#string-example-4-substring-search">String Example #4: Substring Search</a></li>
+        <li class="level-2"><a href="#string-example-5-trimming">String Example #5: Trimming</a></li>
+        <li class="level-2"><a href="#string-example-6-split-and-join">String Example #6: Split and Join</a></li>
+        <li class="level-2"><a href="#string-example-7-convert-case">String Example #7: Convert Case</a></li>
+        <li class="level-2"><a href="#string-example-8-replace-substring">String Example #8: Replace Substring</a></li>
+        <li class="level-2"><a href="#string-example-9-multi-line-literals">String Example #9: Multi-line Literals</a></li>
+        <li class="level-2"><a href="#string-example-10-unicode-handling">String Example #10: Unicode Handling</a></li>      
+        </li>
+
+        <!-- MISCELLANEOUS EXAMPLES  -->  
+        <li class="level-1"><a href="#tuples-examples">Tuples</a></li>
+        <li class="level-1"><a href="#structures-examples">Structures (structs)</a></li>
+        <li class="level-1"><a href="#enumerations-examples">Enumerations (enum)</a></li>
+        <li class="level-1"><a href="#unions-examples">Unions</a></li>
+        <li class="level-1"><a href="#pointers-examples">Pointers</a></li>
+        <li class="level-2"><a href="#unsafe-safe-pointers-examples">Unsafe vs. Safe Pointers</a></li>
+        <li class="level-2"><a href="#sentinel-terminated-pointers-examples">Sentinel-Terminated Pointers</a></li>
+        <li class="level-1"><a href="#alignment-and-address-spaces-examples">Alignment &amp; Address Spaces</a></li>
+        <li class="level-1"><a href="#optionals-examples">Optionals (?T)</a></li>
+        <li class="level-1"><a href="#usage-unwrapping-examples">Usage &amp; Unwrapping</a></li>
+        <li class="level-1"><a href="#comparisons-with-null-examples">Comparisons with Null</a></li>
+        <li class="level-1"><a href="#error-unions-examples">Error Unions (!T)</a></li>
+        <li class="level-1"><a href="#defining-propagating-errors-examples">Defining &amp; Propagating Errors</a></li>
+        <li class="level-1"><a href="#error-sets-examples">Error Sets</a></li>
+        <li class="level-1"><a href="#try-and-catch-examples">try and catch</a></li>
+
+    <!-- CONTROL FLOW EXAMPLES -->
+    <li class="level-1"><a href="#control-flow-examples">Control Flow Examples</a></li>
+      <li class="level-2"><a href="#if-statements-examples">If Statements &amp; Expressions</a></li>
+        <li class="level-3"><a href="#if-else-syntax-examples">if / else syntax</a></li>
+        <li class="level-3"><a href="#optional-chaining-examples">Optional chaining</a></li>
+        <li class="level-3"><a href="#inline-if-expressions-examples">Inline if-expressions</a></li>
+      <li class="level-2"><a href="#while-loops-examples">While Loops</a></li>
+        <li class="level-3"><a href="#basic-while-conditions-examples">Basic while Conditions</a></li>
+        <li class="level-3"><a href="#while-condition-item-pattern-examples">while (condition) |item| {...} pattern</a></li>
+        <li class="level-3"><a href="#breaking-early-examples">Breaking early with break</a></li>
+      <li class="level-2"><a href="#for-loops-examples">For Loops</a></li>
+        <li class="level-3"><a href="#iterating-over-collections-examples">Iterating Arrays, Slices, Ranges</a></li>
+        <li class="level-3"><a href="#index-value-variables-examples">Index &amp; Value Variables</a></li>
+      <li class="level-2"><a href="#ranges-examples">Ranges</a></li>
+        <li class="level-3"><a href="#numeric-ranges-examples">Numeric Ranges</a></li>
+        <li class="level-3"><a href="#using-ranges-for-examples">Using with for</a></li>
+      <li class="level-2"><a href="#break-continue-examples">Break &amp; Continue</a></li>
+        <li class="level-3"><a href="#breaking-out-of-loops-examples">Breaking out of Loops</a></li>
+        <li class="level-3"><a href="#skipping-iterations-examples">Skipping Iterations</a></li>
+      <li class="level-2"><a href="#switch-statements-examples">Switch Statements</a></li>
+        <li class="level-3"><a href="#pattern-matching-examples">Pattern Matching with Enums, Tagged Unions, etc.</a></li>
+        <li class="level-3"><a href="#exhaustive-nonexhaustive-switch-examples">Exhaustive vs. Non-Exhaustive Switch</a></li>
+
+    <!-- MEMORY MANAGEMENT EXAMPLES -->
+    <li class="level-1"><a href="#memory-management-examples">Memory Management Examples</a></li>
+      <li class="level-2"><a href="#allocators-examples">Allocators</a></li>
+        <li class="level-3"><a href="#standard-allocators-examples">Standard Allocators (std.heap.*, etc.)</a></li>
+        <li class="level-3"><a href="#creating-custom-allocators-examples">Creating Custom Allocators</a></li>
+        <li class="level-3"><a href="#lifetime-considerations-examples">Lifetime Considerations</a></li>
+      <li class="level-2"><a href="#manual-memory-control-examples">Manual Memory Control</a></li>
+        <li class="level-3"><a href="#allocating-arrays-slices-structs-examples">Allocating Arrays, Slices, Structs</a></li>
+        <li class="level-3"><a href="#freeing-resizing-examples">Freeing &amp; Resizing</a></li>
+      <li class="level-2"><a href="#pointers-and-slices-revisited-examples">Pointers &amp; Slices Revisited</a></li>
+        <li class="level-3"><a href="#pointer-arithmetic-examples">Pointer Arithmetic</a></li>
+        <li class="level-3"><a href="#slicing-arrays-examples">Slicing Arrays</a></li>
+      <li class="level-2"><a href="#zero-cost-abstractions-examples">Zero-Cost Abstractions</a></li>
+        <li class="level-3"><a href="#minimizing-runtime-cost-examples">Minimizing Runtime Cost</a></li>
+        <li class="level-3"><a href="#ensuring-safety-examples">Ensuring Safety</a></li>
+
+    <!-- ERROR HANDLING EXAMPLES -->
+    <li class="level-1"><a href="#error-handling-examples">Error Handling Examples</a></li>
+      <li class="level-2"><a href="#declaring-errors-examples">Declaring Errors</a></li>
+        <li class="level-3"><a href="#error-literals-examples">error{SomeError}, error.UnexpectedEOF, etc.</a></li>
+      <li class="level-2"><a href="#error-propagation-examples">Error Propagation</a></li>
+        <li class="level-3"><a href="#using-try-catch-examples">Using try/catch</a></li>
+        <li class="level-3"><a href="#error-unions-notation-examples">Error Unions (!T)</a></li>
+        <li class="level-3"><a href="#return-error-examples">return error.SomethingBad</a></li>
+      <li class="level-2"><a href="#handling-errors-examples">Handling Errors</a></li>
+        <li class="level-3"><a href="#pattern-matching-switch-examples">Pattern Matching with switch</a></li>
+        <li class="level-3"><a href="#using-catch-err-examples">Using catch |err| {...}</a></li>
+      <li class="level-2"><a href="#defer-cleanup-examples">Defer &amp; Cleanup</a></li>
+        <li class="level-3"><a href="#defer-statements-examples">defer statements</a></li>
+        <li class="level-3"><a href="#error-safe-resource-management-examples">Error-Safe Resource Management</a></li>
+
+    <!-- COMPILE-TIME FEATURES EXAMPLES -->
+    <li class="level-1"><a href="#compile-time-features-examples">Compile-Time Features Examples</a></li>
+      <li class="level-2"><a href="#comptime-keyword-examples">comptime Keyword</a></li>
+        <li class="level-3"><a href="#compile-time-conditionals-examples">Compile-Time Conditionals</a></li>
+        <li class="level-3"><a href="#compile-time-loops-examples">Compile-Time Loops</a></li>
+      <li class="level-2"><a href="#compile-time-functions-examples">Compile-Time Functions</a></li>
+        <li class="level-3"><a href="#fn-foo-comptime-examples">fn foo(comptime x: T) ...</a></li>
+        <li class="level-3"><a href="#evaluating-fn-compile-time-examples">Evaluating Functions at CT</a></li>
+      <li class="level-2"><a href="#reflection-metaprogramming-examples">Reflection &amp; Metaprogramming</a></li>
+        <li class="level-3"><a href="#typeinfo-typename-field-examples">@typeInfo, @typeName, @field</a></li>
+        <li class="level-3"><a href="#generics-param-code-examples">Generics / Parameterized Code</a></li>
+      <li class="level-2"><a href="#inline-assembly-examples">Inline Assembly</a></li>
+        <li class="level-3"><a href="#asm-syntax-examples">Syntax &amp; instructions</a></li>
+        <li class="level-3"><a href="#asm-safety-constraints-examples">Safety &amp; Constraints</a></li>
+
+    <!-- CONCURRENCY & ASYNC I/O EXAMPLES -->
+    <li class="level-1"><a href="#concurrency-async-io-examples">Concurrency &amp; Async I/O Examples</a></li>
+      <li class="level-2"><a href="#async-functions-examples">Async Functions</a></li>
+        <li class="level-3"><a href="#async-fn-basics-examples">async fn basics</a></li>
+        <li class="level-3"><a href="#await-usage-examples">await usage</a></li>
+      <li class="level-2"><a href="#suspend-resume-examples">Suspend &amp; Resume</a></li>
+        <li class="level-3"><a href="#cooperative-concurrency-examples">Cooperative Concurrency</a></li>
+        <li class="level-3"><a href="#event-loop-integration-examples">Event Loop Integration</a></li>
+      <li class="level-2"><a href="#channel-queue-abstractions-examples">Channel &amp; Queue Abstractions</a></li>
+        <li class="level-3"><a href="#passing-data-between-tasks-examples">Passing Data Between Tasks</a></li>
+        <li class="level-3"><a href="#std-channel-examples">std.Channel (if available)</a></li>
+      <li class="level-2"><a href="#async-network-operations-examples">Async Network Operations</a></li>
+
+    <!-- STANDARD LIBRARY ESSENTIALS EXAMPLES -->
+    <li class="level-1"><a href="#standard-library-essentials-examples">Standard Library Essentials Examples</a></li>
+      <li class="level-2"><a href="#overview-std-examples">Overview of std</a></li>
+        <li class="level-3"><a href="#modules-and-imports-examples">Modules &amp; How to Import</a></li>
+      <li class="level-2"><a href="#common-modules-examples">Common Modules</a></li>
+        <li class="level-3"><a href="#std-math-examples">std.math</a></li>
+        <li class="level-3"><a href="#std-fs-examples">std.fs</a></li>
+        <li class="level-3"><a href="#std-mem-examples">std.mem</a></li>
+        <li class="level-3"><a href="#std-testing-examples">std.testing</a></li>
+        <li class="level-3"><a href="#std-time-examples">std.time</a></li>
+      <li class="level-2"><a href="#data-structures-std-examples">Data Structures in std</a></li>
+        <li class="level-3"><a href="#arraylist-arrayhashmap-examples">ArrayList, ArrayHashMap, LinkedList, etc.</a></li>
+        <li class="level-3"><a href="#usage-examples-allocation">Usage &amp; Memory Allocation</a></li>
+      <li class="level-2"><a href="#utilities-helpers-examples">Utilities &amp; Helpers</a></li>
+        <li class="level-3"><a href="#std-debug-examples">std.debug (logging, printing)</a></li>
+        <li class="level-3"><a href="#std-os-examples">std.os (OS calls)</a></li>
+        <li class="level-3"><a href="#std-process-examples">std.process (launching processes)</a></li>
+
+    <!-- INTERFACING WITH C/C++ EXAMPLES -->
+    <li class="level-1"><a href="#interfacing-c-cpp-examples">Interfacing with C/C++ Examples</a></li>
+      <li class="level-2"><a href="#c-headers-ffi-examples">@cImport and @cInclude</a></li>
+        <li class="level-3"><a href="#linking-system-libraries-examples">Linking system libraries</a></li>
+      <li class="level-2"><a href="#calling-zig-from-c-examples">Calling Zig from C</a></li>
+        <li class="level-3"><a href="#generating-header-files-translate-c-examples">Generating .h with zig translate-c</a></li>
+      <li class="level-2"><a href="#mixed-projects-examples">Mixed Projects</a></li>
+        <li class="level-3"><a href="#organizing-zig-c-cpp-code-examples">Organizing Zig + C/C++ code</a></li>
+        <li class="level-3"><a href="#build-system-integration-examples">Build System Integration</a></li>
+
+    <!-- TESTING & DEBUGGING EXAMPLES -->
+    <li class="level-1"><a href="#testing-debugging-examples">Testing &amp; Debugging Examples</a></li>
+      <li class="level-2"><a href="#test-declarations-examples">Test Declarations</a></li>
+        <li class="level-3"><a href="#test-description-block-examples">test "description" { ... }</a></li>
+        <li class="level-3"><a href="#running-tests-zig-test-examples">Running Tests with zig test</a></li>
+      <li class="level-2"><a href="#test-organization-examples">Test Organization</a></li>
+        <li class="level-3"><a href="#multiple-test-files-examples">Multiple Test Files, Modules</a></li>
+        <li class="level-3"><a href="#std-testing-assertions-examples">Using std.testing Assertions</a></li>
+      <li class="level-2"><a href="#debugging-examples">Debugging</a></li>
+        <li class="level-3"><a href="#compiler-flags-examples">Compiler Flags (-femit-llvm-ir, etc.)</a></li>
+        <li class="level-3"><a href="#using-lldb-gdb-examples">Using LLDB or GDB</a></li>
+        <li class="level-3"><a href="#print-debugging-stddebugprint-examples">Print Debugging (std.debug.print)</a></li>
+
+    <!-- DEPLOYMENT & DISTRIBUTION EXAMPLES -->
+    <li class="level-1"><a href="#deployment-distribution-examples">Deployment &amp; Distribution Examples</a></li>
+      <li class="level-2"><a href="#cross-compilation-examples">Cross-Compilation in Depth</a></li>
+        <li class="level-3"><a href="#specifying-target-examples">Specifying --target</a></li>
+        <li class="level-3"><a href="#building-static-shared-libs-examples">Building Static vs. Shared Libraries</a></li>
+        <li class="level-3"><a href="#packaging-multiple-platforms-examples">Packaging for Multiple Platforms</a></li>
+      <li class="level-2"><a href="#optimization-modes-examples">Optimization Modes</a></li>
+        <li class="level-3"><a href="#debug-opt-examples">Debug</a></li>
+        <li class="level-3"><a href="#releasesafe-opt-examples">ReleaseSafe</a></li>
+        <li class="level-3"><a href="#releasefast-opt-examples">ReleaseFast</a></li>
+        <li class="level-3"><a href="#releasesmall-opt-examples">ReleaseSmall</a></li>
+      <li class="level-2"><a href="#stripping-symbols-size-examples">Stripping Symbols &amp; Minimizing Binary Size</a></li>
+      <li class="level-2"><a href="#reproducible-builds-examples">Reproducible Builds</a></li>
+
+    <!-- ADVANCED TOPICS EXAMPLES -->
+    <li class="level-1"><a href="#advanced-topics-examples">Advanced Topics Examples</a></li>
+      <li class="level-2"><a href="#zig-as-linker-examples">Using Zig as a Linker</a></li>
+        <li class="level-3"><a href="#zig-cc-zig-cpp-examples">zig cc, zig c++ commands</a></li>
+        <li class="level-3"><a href="#wrapping-external-toolchains-examples">Wrapping External Toolchains</a></li>
+      <li class="level-2"><a href="#generic-programming-examples">Generic Programming</a></li>
+        <li class="level-3"><a href="#type-parameters-examples">Type Parameters</a></li>
+        <li class="level-3"><a href="#comptime-techniques-examples">comptime techniques</a></li>
+      <li class="level-2"><a href="#bit-manipulation-examples">Bit Manipulation</a></li>
+        <li class="level-3"><a href="#packed-structs-bitfields-examples">Packed Structs, Bitfields, Endianness</a></li>
+      <li class="level-2"><a href="#inline-functions-builtins-examples">Inline Functions &amp; Builtins</a></li>
+        <li class="level-3"><a href="#builtin-functions-examples">@import, @sizeOf, etc.</a></li>
+      <li class="level-2"><a href="#performance-tuning-examples">Performance Tuning</a></li>
+        <li class="level-3"><a href="#measuring-performance-examples">Measuring Performance</a></li>
+        <li class="level-3"><a href="#profiling-tools-examples">Profiling Tools</a></li>
+        <li class="level-3"><a href="#allocation-patterns-examples">Allocation Patterns</a></li>
+
+    <!-- TOOLING OVERVIEW EXAMPLES -->
+    <li class="level-1"><a href="#tooling-overview-examples">Tooling Overview Examples</a></li>
+      <li class="level-2"><a href="#zig-fmt-examples">zig fmt (Formatter)</a></li>
+      <li class="level-2"><a href="#zig-translate-c-examples">zig translate-c (C to Zig)</a></li>
+      <li class="level-2"><a href="#zig-ast-check-examples">zig ast-check (Syntax &amp; Semantic Checks)</a></li>
+      <li class="level-2"><a href="#zig-targets-examples">zig targets (List Supported Targets)</a></li>
+      <li class="level-2"><a href="#zig-env-examples">zig env (Environment Info)</a></li>
+
+    <!-- BUILD PROCESS EXAMPLES: MULTIPLE -->
+
+    <li class="level-2"><a href="#zig-build-examples">zig build Examples</a></li>
+    <li><a href="#build-example-1-basic-usage">Build Example #1: Basic Usage</a></li>
+    <li><a href="#build-example-2-build-executable">Build Example #2: Build Executable</a></li>
+    <li><a href="#build-example-3-build-library">Build Example #3: Build Library</a></li>
+    <li><a href="#build-example-4-custom-build-steps">Build Example #4: Custom Build Steps</a></li>
+    <li><a href="#build-example-5-link-system-libraries">Build Example #5: Link System Libraries</a></li>
+    <li><a href="#build-example-6-set-target">Build Example #6: Set Target (Cross-Compile)</a></li>
+    <li><a href="#build-example-7-set-build-mode">Build Example #7: Set Build Mode</a></li>
+    <li><a href="#build-example-8-run-tests">Build Example #8: Run Tests</a></li>
+    <li><a href="#build-example-9-install-artifacts">Build Example #9: Install Artifacts</a></li>
+    <li><a href="#build-example-10-overriding-std-special-strings">Build Example #10: Overriding std Special Strings</a></li>
+
+  </ul>
+</div>   <!-- End of sidebar  --> 
+
+
+<!-- TOGGLE BAR -->
+<div id="toggle-bar">
+  <span id="toggle-symbol"><</span>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- Top Nav Bar -->
+  <div class="top-nav">
+
+    <!-- Left side: Nav Buttons -->
+    <div class="nav-buttons">
+      <!-- "Zig Language" leads to language.html -->
+      <button class="nav-button" type="button" onclick="window.location.href='../language/language.html'">
+        Zig Language
+      </button>
+
+      <!-- "Standard Library" leads to stdlib.html -->
+      <button class="nav-button" type="button" onclick="window.location.href='../stdlib/stdlib.html'">
+        Zig Standard Library
+      </button>
+
+      <!-- "Examples" is greyed-out because we are on this page. -->
+      <button class="nav-button current" type="button">
+        Zig Examples
+      </button>      
+    </div>  <!-- end Nav buttons  -->
+
+    <!-- Right side: Theme Selector -->
+    <div class="style-selector-container">
+      <label for="theme-switcher">Theme:</label>
+      <select id="theme-switcher">
+        <option value="serene_blues">Serene Blues</option>
+        <option value="muted_greens">Muted Greens</option>
+        <option value="soft_earth_tones">Soft Earth Tones</option>
+        <option value="modern_grayscale">Modern Grayscale</option>
+        <option value="lemon_daydream">Lemon Daydream</option>
+        <option value="lilac_mist">Lilac Mist</option>
+        <option value="apricot_sunset">Apricot Sunset</option>
+        <option value="neon_noir">Neon Noir</option>
+        <option value="police_mode">PULL OVER, BUDDY!</option>
+      </select>
+    </div>
+  </div><!-- end .top-nav -->
+
+
+  <!-- ########################################################## -->
+  <!--  Text for "main content" goes here.  --> 
+  <!-- ########################################################## -->  
+
+<!-- ========================= -->
+<!-- LANGUAGE BASICS EXAMPLES -->
+<!-- ========================= -->
+<h1 id="language-basics-examples">Zig Examples</h1>
+
+<!-- Variables and Constants -->
+<h2 id="variables-and-constants-examples">Variables and Constants</h2>
+
+<!-- var vs. const -->
+<h3 id="var-vs-const-examples">var vs. const</h3>
+<p>Demonstrates declaring mutable and immutable variables.</p>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var mutable_var: i32 = 10;
+    mutable_var = 20;
+
+    const immutable_var: i32 = 30;
+    // immutable_var = 40; // Error: cannot assign to a const
+
+    std.debug.print("mutable_var = {d}, immutable_var = {d}\n", .{mutable_var, immutable_var});
+}
+</code></pre>
+
+<!-- Block Scopes -->
+<h3 id="block-scopes-examples">Block Scopes</h3>
+<p>Demonstrates variable scopes within code blocks.</p>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var x: i32 = 1;
+    {
+        var x: i32 = 2; // Shadows outer x within this block
+        std.debug.print("Inner x = {d}\n", .{x});
+    }
+    std.debug.print("Outer x = {d}\n", .{x});
+}
+</code></pre>
+
+<!-- Shadowing -->
+<h3 id="shadowing-examples">Shadowing</h3>
+<p>Re-declaring a variable with the same name in a nested scope.</p>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var value: i32 = 5;
+    std.debug.print("Before shadow: {d}\n", .{value});
+
+    {
+        const value = "shadowed string"; 
+        std.debug.print("Shadowed value = {s}\n", .{value});
+    }
+
+    std.debug.print("Original value = {d}\n", .{value});
+}
+</code></pre>
+
+<!-- Naming Conventions -->
+<h2 id="naming-conventions-examples">Naming Conventions</h2>
+
+<!-- Identifiers & Style -->
+<h3 id="identifiers-and-style-examples">Identifiers &amp; Style</h3>
+<p>Illustrates typical naming with snake_case or lowerCamelCase for variables.</p>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var my_variable: i32 = 10;
+    std.debug.print("my_variable = {d}\n", .{my_variable});
+}
+</code></pre>
+
+<!-- Module / File Names -->
+<h3 id="module-file-names-examples">Module / File Names</h3>
+<p>A quick example of referencing another file named <code>my_module.zig</code>.</p>
+<pre><code>// my_module.zig
+pub fn greet() []const u8 {
+    return "Hello from my_module!";
+}
+
+// main.zig
+const std = @import("std");
+const my_module = @import("my_module.zig");
+
+pub fn main() void {
+    std.debug.print("{s}\n", .{my_module.greet()});
+}
+</code></pre>
+
+<!-- Comments and Documentation -->
+<h2 id="comments-and-docs-examples">Comments and Documentation</h2>
+
+<!-- Single-line & Multi-line Comments -->
+<h3 id="single-multi-line-comments-examples">Single-line &amp; Multi-line Comments</h3>
+<pre><code>const std = @import("std");
+
+// This is a single-line comment
+
+/* 
+   This is a multi-line comment 
+   spanning multiple lines
+*/
+
+pub fn main() void {
+    std.debug.print("Check the code comments!\n", .{});
+}
+</code></pre>
+
+<!-- Doc Comments (///) -->
+<h3 id="doc-comments-examples">Doc Comments (///)</h3>
+<p>Demonstrates using doc comments to generate documentation.</p>
+<pre><code>/// A function that says hello
+pub fn sayHello() []const u8 {
+    return "Hello doc comment!";
+}
+
+pub fn main() void {}
+</code></pre>
+
+<!-- Code Organization -->
+<h2 id="code-organization-examples">Code Organization</h2>
+
+<!-- Files & Modules -->
+<h3 id="files-and-modules-examples">Files &amp; Modules</h3>
+<p>Simple module <code>utils.zig</code> plus <code>main.zig</code> organization.</p>
+<pre><code>// utils.zig
+pub fn getNumber() i32 {
+    return 42;
+}
+
+// main.zig
+const std = @import("std");
+const utils = @import("utils.zig");
+
+pub fn main() void {
+    std.debug.print("Number: {d}\n", .{utils.getNumber()});
+}
+</code></pre>
+
+<!-- Package Imports (@import, etc.) -->
+<h3 id="package-imports-examples">Package Imports (@import, relative/absolute paths)</h3>
+<p>Using <code>@import</code> with relative path or <code>std</code>.</p>
+<pre><code>const std = @import("std");
+const mypkg = @import("../mypkg.zig");
+
+pub fn main() void {
+    std.debug.print("Imported a package!\n", .{});
+}
+</code></pre>
+
+<!-- =================== -->
+<!-- DATA TYPES EXAMPLES -->
+<!-- =================== -->
+<h1 id="data-types-examples">Data Types Examples</h1>
+
+<!-- Primitive Types -->
+<h2 id="primitive-types-examples">Primitive Types</h2>
+
+<!-- Integers -->
+<h3 id="integers-examples">Integers (Signed/Unsigned, comptime_int)</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var a: i32 = -10;    // signed
+    var b: u32 = 42;     // unsigned
+    // comptime_int is used in compile-time contexts
+    std.debug.print("a={d}, b={u}\n", .{a, b});
+}
+</code></pre>
+
+<!-- Floating-Point -->
+<h3 id="floating-point-examples">Floating-Point (f16, f32, f64, comptime_float)</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var x: f64 = 3.14159;
+    std.debug.print("Pi ~ {}\n", .{x});
+}
+</code></pre>
+
+<!-- Booleans -->
+<h3 id="booleans-examples">Booleans</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const flag: bool = true;
+    if (flag) {
+        std.debug.print("It's true!\n", .{});
+    }
+}
+</code></pre>
+
+<!-- Characters -->
+<h3 id="characters-examples">Characters (u8 code points)</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const letter: u8 = 'A'; // ASCII code for 'A'
+    std.debug.print("Letter is: {c}\n", .{letter});
+}
+</code></pre>
+
+<!-- Compound Types -->
+<h2 id="compound-types-examples">Compound Types</h2>
+
+<!-- Arrays & Slices -->
+<h3 id="arrays-and-slices-examples">Arrays &amp; Slices</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var arr = [_]i32{1, 2, 3};
+    var slice = arr[0..2]; 
+    std.debug.print("slice[0] = {d}\n", .{slice[0]});
+}
+</code></pre>
+
+<!-- STRINGS (10 examples already inserted) -->
+<h3 id="strings-examples">Strings</h3>
+<!-- (Insert the 10 examples for strings here) -->
+<!-- For brevity, reusing from the previous response. -->
+
+<h4 id="string-example-1-basic-literal">String Example #1: Basic Literal</h4>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const greeting = "Hello, Zig!";
+    std.debug.print("{s}\n", .{greeting});
+}
+</code></pre>
+
+<h4 id="string-example-2-concatenation">String Example #2: Concatenation</h4>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var allocator = std.heap.page_allocator;
+    const part1 = "Hello, ";
+    const part2 = "World!";
+    const combined = try std.mem.concat(u8, allocator, part1, part2);
+    defer allocator.free(combined);
+    std.debug.print("{s}\n", .{combined});
+}
+</code></pre>
+
+<h4 id="string-example-3-formatting">String Example #3: Formatting</h4>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var buffer: [50]u8 = undefined;
+    const length = std.fmt.format(buffer[0..], "Name: {}, Age: {}", .{"Alice", 30});
+    std.debug.print("{s}\n", .{buffer[0..length]});
+}
+</code></pre>
+
+<h4 id="string-example-4-substring-search">String Example #4: Substring Search</h4>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const text = "Zig is fun";
+    const substr = "fun";
+    const idx = std.mem.indexOf(u8, text, substr);
+    if (idx != null) {
+        std.debug.print("Found '{s}' at index {d}\n", .{substr, idx.?});
+    } else {
+        std.debug.print("Substring not found.\n", .{});
+    }
+}
+</code></pre>
+
+<h4 id="string-example-5-trimming">String Example #5: Trimming</h4>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    const original = "   Hello Zig   ";
+    const trimmed = std.mem.trim(u8, original, " ");
+    std.debug.print("Original: '{s}'\nTrimmed:  '{s}'\n", .{original, trimmed});
+}
+</code></pre>
+
+<h4 id="string-example-6-split-and-join">String Example #6: Split and Join</h4>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var tokenizer = std.mem.tokenize(u8, "apple,banana,cherry", ",");
+    var list = tokenizer.toSlice();
+
+    var allocator = std.heap.page_allocator;
+    const joined = try std.mem.join(u8, allocator, list, " | ");
+    defer allocator.free(joined);
+    std.debug.print("{s}\n", .{joined});
+}
+</code></pre>
+
+<h4 id="string-example-7-convert-case">String Example #7: Convert Case</h4>
+<pre><code>const std = @import("std");
+
+fn toUppercase(str: []const u8) []u8 {
+    var buffer: [256]u8 = undefined;
+    var count: usize = 0;
+    for (str) |c| {
+        buffer[count] = std.ascii.toUpper(c);
+        count += 1;
+    }
+    return buffer[0..count];
+}
+
+pub fn main() void {
+    const word = "zig";
+    const upper = toUppercase(word);
+    std.debug.print("Uppercase: {s}\n", .{upper});
+}
+</code></pre>
+
+<h4 id="string-example-8-replace-substring">String Example #8: Replace Substring</h4>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var text = "Hello Zig, Zig is great!";
+    const old = "Zig";
+    const new = "ZIG";
+    // Basic approach (example only)
+    const replaced = replaceAll(text, old, new);
+    std.debug.print("{s}\n", .{replaced});
+}
+
+fn replaceAll(text: []const u8, old: []const u8, new: []const u8) []const u8 {
+    // Implementation placeholder
+    return text; 
+}
+</code></pre>
+
+<h4 id="string-example-9-multi-line-literals">String Example #9: Multi-line Literals</h4>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const multiline = \\ 
+        \\Line one
+        \\Line two
+        \\Line three
+    ;
+    std.debug.print("{s}\n", .{multiline});
+}
+</code></pre>
+
+<h4 id="string-example-10-unicode-handling">String Example #10: Unicode Handling</h4>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const unicodeString = "Hello ♔ Zig"; 
+    if (std.utf8.validate(unicodeString)) {
+        std.debug.print("Valid UTF-8: {s}\n", .{unicodeString});
+    }
+}
+</code></pre>
+
+<!-- Tuples -->
+<h3 id="tuples-examples">Tuples</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const person = .{ .name = "Alice", .age = 30 };
+    std.debug.print("Name: {s}, Age: {d}\n", .{person.name, person.age});
+}
+</code></pre>
+
+<!-- Structures -->
+<h3 id="structures-examples">Structures (struct)</h3>
+<pre><code>const std = @import("std");
+
+const Person = struct {
+    name: []const u8,
+    age: u32,
+};
+
+pub fn main() void {
+    var alice = Person{ .name = "Alice", .age = 30 };
+    std.debug.print("{s} is {d} years old.\n", .{alice.name, alice.age});
+}
+</code></pre>
+
+<!-- Enumerations -->
+<h3 id="enumerations-examples">Enumerations (enum)</h3>
+<pre><code>const std = @import("std");
+
+const Color = enum {
+    Red,
+    Green,
+    Blue,
+};
+
+pub fn main() void {
+    const c = Color.Green;
+    std.debug.print("Color is {}\n", .{c});
+}
+</code></pre>
+
+<!-- Unions -->
+<h3 id="unions-examples">Unions</h3>
+<pre><code>const std = @import("std");
+
+const MyUnion = union(enum) {
+    i: i32,
+    f: f64,
+};
+
+pub fn main() void {
+    var val = MyUnion{ .i = 42 };
+    switch (val) {
+        .i => |x| std.debug.print("Integer: {d}\n", .{x}),
+        .f => |y| std.debug.print("Float: {}\n", .{y}),
+    }
+}
+</code></pre>
+
+<!-- Pointers -->
+<h2 id="pointers-examples">Pointers</h2>
+<!-- Unsafe vs. Safe Pointers -->
+<h3 id="unsafe-safe-pointers-examples">Unsafe vs. Safe Pointers</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var x: i32 = 100;
+    var ptr_x: *i32 = &x;      // Unsafe pointer
+    const safe_ptr: ?*i32 = &x; // Optional pointer
+    if (safe_ptr) |sp| {
+        sp.* = 200;
+    }
+    std.debug.print("x = {d}\n", .{x});
+}
+</code></pre>
+
+<!-- Sentinel-Terminated Pointers -->
+<h3 id="sentinel-terminated-pointers-examples">Sentinel-Terminated Pointers</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const my_c_string: [*:0]const u8 = "Hello!\0"; // sentinel is 0
+    std.debug.print("C-string: {s}\n", .{my_c_string});
+}
+</code></pre>
+
+<!-- Alignment & Address Spaces -->
+<h3 id="alignment-and-address-spaces-examples">Alignment &amp; Address Spaces</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    // Example showing alignment specification
+    var aligned: align(16) [4]u8 = .{0,1,2,3};
+    std.debug.print("Aligned array first byte: {d}\n", .{aligned[0]});
+}
+</code></pre>
+
+<!-- Optionals -->
+<h2 id="optionals-examples">Optionals (?T)</h2>
+<!-- Usage & Unwrapping -->
+<h3 id="usage-unwrapping-examples">Usage &amp; Unwrapping</h3>
+<pre><code>const std = @import("std");
+
+fn maybeGetString(return_null: bool) ?[]const u8 {
+    if (return_null) return null;
+    return "Zig!";
+}
+
+pub fn main() void {
+    const result = maybeGetString(false);
+    if (result) |val| {
+        std.debug.print("Got a string: {s}\n", .{val});
+    } else {
+        std.debug.print("Got null!\n", .{});
+    }
+}
+</code></pre>
+
+<!-- Comparisons with Null -->
+<h3 id="comparisons-with-null-examples">Comparisons with Null</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var x: ?i32 = null;
+    if (x == null) {
+        std.debug.print("x is null\n", .{});
+    }
+}
+</code></pre>
+
+<!-- Error Unions -->
+<h2 id="error-unions-examples">Error Unions (!T)</h2>
+
+<!-- Defining & Propagating Errors -->
+<h3 id="defining-propagating-errors-examples">Defining &amp; Propagating Errors</h3>
+<pre><code>const std = @import("std");
+
+pub fn mightFail(x: i32) !i32 {
+    if (x < 0) return error.InvalidArgument;
+    return x * 2;
+}
+
+pub fn main() !void {
+    const val = try mightFail(5);
+    std.debug.print("Result: {d}\n", .{val});
+}
+</code></pre>
+
+<!-- Error Sets -->
+<h3 id="error-sets-examples">Error Sets</h3>
+<pre><code>const std = @import("std");
+
+error MyErrors = {
+    SomeError,
+    AnotherError,
+};
+
+pub fn main() void {}
+</code></pre>
+
+<!-- try and catch -->
+<h3 id="try-and-catch-examples">try and catch</h3>
+<pre><code>const std = @import("std");
+
+fn riskyOperation() !void {
+    return error.Oops;
+}
+
+pub fn main() void {
+    const result = riskyOperation() catch |err| {
+        std.debug.print("Caught error: {s}\n", .{@errorName(err)});
+        return;
+    };
+    std.debug.print("No error!\n", .{});
+}
+</code></pre>
+
+<!-- ========================= -->
+<!-- CONTROL FLOW EXAMPLES -->
+<!-- ========================= -->
+<h1 id="control-flow-examples">Control Flow Examples</h1>
+
+<!-- If Statements & Expressions -->
+<h2 id="if-statements-examples">If Statements &amp; Expressions</h2>
+<!-- if / else syntax -->
+<h3 id="if-else-syntax-examples">if / else syntax</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const x = 10;
+    if (x > 5) {
+        std.debug.print("x is greater than 5\n", .{});
+    } else {
+        std.debug.print("x is not greater than 5\n", .{});
+    }
+}
+</code></pre>
+
+<!-- Optional chaining -->
+<h3 id="optional-chaining-examples">Optional chaining (if (optional) |value| {...})</h3>
+<pre><code>const std = @import("std");
+
+fn maybeNumber() ?i32 {
+    return 42;
+}
+
+pub fn main() void {
+    if (maybeNumber()) |val| {
+        std.debug.print("Got number: {d}\n", .{val});
+    } else {
+        std.debug.print("Got null\n", .{});
+    }
+}
+</code></pre>
+
+<!-- Inline if-expressions -->
+<h3 id="inline-if-expressions-examples">Inline if-expressions</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const y = if (true) 1 else 0;
+    std.debug.print("y = {d}\n", .{y});
+}
+</code></pre>
+
+<!-- While Loops -->
+<h2 id="while-loops-examples">While Loops</h2>
+<!-- Basic while Conditions -->
+<h3 id="basic-while-conditions-examples">Basic while Conditions</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var i: i32 = 0;
+    while (i < 3) : (i += 1) {
+        std.debug.print("i = {d}\n", .{i});
+    }
+}
+</code></pre>
+
+<!-- while (condition) |item| -->
+<h3 id="while-condition-item-pattern-examples">while (condition) |item| {...} pattern</h3>
+<pre><code>const std = @import("std");
+
+fn nextVal() ?i32 {
+    return null; // In real usage, might return an i32 or null
+}
+
+pub fn main() void {
+    while (nextVal()) |val| {
+        std.debug.print("Got: {d}\n", .{val});
+    }
+}
+</code></pre>
+
+<!-- Breaking early with break -->
+<h3 id="breaking-early-examples">Breaking early with break</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var i: i32 = 0;
+    while (i < 10) : (i += 1) {
+        if (i == 5) break;
+    }
+    std.debug.print("Stopped at i = {d}\n", .{i});
+}
+</code></pre>
+
+<!-- For Loops -->
+<h2 id="for-loops-examples">For Loops</h2>
+
+<!-- Iterating over Arrays, Slices, Ranges -->
+<h3 id="iterating-over-collections-examples">Iterating Arrays, Slices, Ranges</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const arr = [_]u8{1,2,3};
+    for (arr) |item| {
+        std.debug.print("Item = {d}\n", .{item});
+    }
+}
+</code></pre>
+
+<!-- Index & Value Variables -->
+<h3 id="index-value-variables-examples">Index &amp; Value Variables</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const arr = [_]u8{10,20,30};
+    for (arr) |item, index| {
+        std.debug.print("Index={d}, Value={d}\n", .{index, item});
+    }
+}
+</code></pre>
+
+<!-- Ranges -->
+<h2 id="ranges-examples">Ranges</h2>
+
+<!-- Numeric Ranges -->
+<h3 id="numeric-ranges-examples">Numeric Ranges</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    for (0..5) |i| {
+        std.debug.print("{d} ", .{i});
+    }
+    std.debug.print("\n", .{});
+}
+</code></pre>
+
+<!-- Using with for -->
+<h3 id="using-ranges-for-examples">Using with for</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    for (10..13) |i| {
+        std.debug.print("{d}\n", .{i});
+    }
+}
+</code></pre>
+
+<!-- Break & Continue -->
+<h2 id="break-continue-examples">Break &amp; Continue</h2>
+
+<!-- Breaking out of Loops -->
+<h3 id="breaking-out-of-loops-examples">Breaking out of Loops</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    for (0..10) |i| {
+        if (i == 3) break;
+        std.debug.print("{d} ", .{i});
+    }
+    std.debug.print("\n", .{});
+}
+</code></pre>
+
+<!-- Skipping Iterations -->
+<h3 id="skipping-iterations-examples">Skipping Iterations</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    for (0..5) |i| {
+        if (i == 2) continue;
+        std.debug.print("{d} ", .{i});
+    }
+    std.debug.print("\n", .{});
+}
+</code></pre>
+
+<!-- Switch Statements -->
+<h2 id="switch-statements-examples">Switch Statements</h2>
+
+<!-- Pattern Matching -->
+<h3 id="pattern-matching-examples">Pattern Matching with Enums, Tagged Unions, etc.</h3>
+<pre><code>const std = @import("std");
+
+const Color = enum { Red, Green, Blue };
+
+pub fn main() void {
+    const c = Color.Blue;
+    switch (c) {
+        .Red => std.debug.print("Red\n", .{}),
+        .Green => std.debug.print("Green\n", .{}),
+        .Blue => std.debug.print("Blue\n", .{}),
+    }
+}
+</code></pre>
+
+<!-- Exhaustive vs. Non-Exhaustive Switch -->
+<h3 id="exhaustive-nonexhaustive-switch-examples">Exhaustive vs. Non-Exhaustive Switch</h3>
+<pre><code>const std = @import("std");
+
+const MyEnum = enum { A, B, C };
+
+pub fn main() void {
+    const val = MyEnum.B;
+    switch (val) {
+        .A => {},
+        .B => {},
+        .C => {},
+        // no 'else' allowed here if we want exhaustive
+    }
+}
+</code></pre>
+
+<!-- ========================== -->
+<!-- MEMORY MANAGEMENT EXAMPLES -->
+<!-- ========================== -->
+<h1 id="memory-management-examples">Memory Management Examples</h1>
+
+<!-- Allocators -->
+<h2 id="allocators-examples">Allocators</h2>
+<!-- Standard Allocators -->
+<h3 id="standard-allocators-examples">Standard Allocators (std.heap.*, etc.)</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    const allocator = arena.allocator();
+    // Use allocator...
+    arena.deinit();
+}
+</code></pre>
+
+<!-- Creating Custom Allocators -->
+<h3 id="creating-custom-allocators-examples">Creating Custom Allocators</h3>
+<pre><code>const std = @import("std");
+
+const MyAllocator = struct {
+    // Implementation ...
+};
+
+pub fn main() void {}
+</code></pre>
+
+<!-- Lifetime Considerations -->
+<h3 id="lifetime-considerations-examples">Lifetime Considerations</h3>
+<pre><code>// Typical pattern: allocate, use, free within correct scope
+</code></pre>
+
+<!-- Manual Memory Control -->
+<h2 id="manual-memory-control-examples">Manual Memory Control</h2>
+
+<!-- Allocating Arrays, Slices, Structs -->
+<h3 id="allocating-arrays-slices-structs-examples">Allocating Arrays, Slices, Structs</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+
+    const slice = try arena.allocator().alloc(u8, 10);
+    // ...
+    arena.allocator().free(slice);
+}
+</code></pre>
+
+<!-- Freeing & Resizing -->
+<h3 id="freeing-resizing-examples">Freeing &amp; Resizing</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+
+    var arr = try arena.allocator().alloc(u8, 5);
+    arr = try arena.allocator().resize(u8, arr, 10);
+    arena.allocator().free(arr);
+}
+</code></pre>
+
+<!-- Pointers & Slices Revisited -->
+<h2 id="pointers-and-slices-revisited-examples">Pointers &amp; Slices Revisited</h2>
+<!-- Pointer Arithmetic -->
+<h3 id="pointer-arithmetic-examples">Pointer Arithmetic</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var arr: [5]u8 = .{1,2,3,4,5};
+    var ptr = &arr[0];
+    const second = ptr + 1;
+    std.debug.print("Second element = {d}\n", .{second.*});
+}
+</code></pre>
+
+<!-- Slicing Arrays -->
+<h3 id="slicing-arrays-examples">Slicing Arrays</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    var arr = [_]u8{10, 20, 30, 40};
+    var slice = arr[1..3];
+    // slice = {20,30}
+    std.debug.print("slice[0] = {d}\n", .{slice[0]});
+}
+</code></pre>
+
+<!-- Zero-Cost Abstractions -->
+<h2 id="zero-cost-abstractions-examples">Working with Zero-Cost Abstractions</h2>
+
+<!-- Minimizing Runtime Cost -->
+<h3 id="minimizing-runtime-cost-examples">Minimizing Runtime Cost</h3>
+<pre><code>// Example concept: inline functions, no overhead
+</code></pre>
+
+<!-- Ensuring Safety -->
+<h3 id="ensuring-safety-examples">Ensuring Safety</h3>
+<pre><code>// Example concept: safe pointers, error unions
+</code></pre>
+
+<!-- ========================== -->
+<!-- ERROR HANDLING EXAMPLES -->
+<!-- ========================== -->
+<h1 id="error-handling-examples">Error Handling Examples</h1>
+
+<!-- Declaring Errors -->
+<h2 id="declaring-errors-examples">Declaring Errors</h2>
+<!-- error-literals-examples -->
+<h3 id="error-literals-examples">error{SomeError}, error.UnexpectedEOF, etc.</h3>
+<pre><code>const std = @import("std");
+
+error MyError = {
+    SomeError,
+    AnotherError,
+};
+</code></pre>
+
+<!-- Error Propagation -->
+<h2 id="error-propagation-examples">Error Propagation</h2>
+<!-- Using try/catch -->
+<h3 id="using-try-catch-examples">Using try/catch</h3>
+<pre><code>const std = @import("std");
+
+fn mightFail() !void {
+    return error.SomeError;
+}
+
+pub fn main() !void {
+    try mightFail();
+    std.debug.print("No errors!\n", .{});
+}
+</code></pre>
+
+<!-- Error Unions (!T) -->
+<h3 id="error-unions-notation-examples">Error Unions (!T)</h3>
+<pre><code>// Already shown above with mightFail function
+</code></pre>
+
+<!-- return error.SomethingBad -->
+<h3 id="return-error-examples">return error.SomethingBad</h3>
+<pre><code>fn doStuff() !void {
+    return error.SomethingBad;
+}
+</code></pre>
+
+<!-- Handling Errors -->
+<h2 id="handling-errors-examples">Handling Errors</h2>
+<!-- Pattern Matching with switch -->
+<h3 id="pattern-matching-switch-examples">Pattern Matching with switch</h3>
+<pre><code>const std = @import("std");
+
+fn doStuff() !void {
+    return error.Failed;
+}
+
+pub fn main() void {
+    const res = doStuff() catch |err| err;
+    switch (res) {
+        error.Failed => std.debug.print("Failed!\n", .{}),
+        else => {},
+    }
+}
+</code></pre>
+
+<!-- Using catch |err| {...} -->
+<h3 id="using-catch-err-examples">Using catch |err| {...}</h3>
+<pre><code>const std = @import("std");
+
+fn mightError() !i32 {
+    return error.Oops;
+}
+
+pub fn main() void {
+    const val = mightError() catch |err| {
+        std.debug.print("Error: {s}\n", .{@errorName(err)});
+        return;
+    };
+    std.debug.print("Got {d}\n", .{val});
+}
+</code></pre>
+
+<!-- Defer & Cleanup -->
+<h2 id="defer-cleanup-examples">Defer &amp; Cleanup</h2>
+
+<!-- defer statements -->
+<h3 id="defer-statements-examples">defer statements</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    std.debug.print("Start\n", .{});
+    defer std.debug.print("Defer runs at scope end!\n", .{});
+    std.debug.print("Middle\n", .{});
+}
+</code></pre>
+
+<!-- Error-Safe Resource Management -->
+<h3 id="error-safe-resource-management-examples">Error-Safe Resource Management</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var file = try std.fs.cwd().openFile("test.txt", .{ .read = true });
+    defer file.close();
+    // If an error occurs, file is still closed
+}
+</code></pre>
+
+<!-- ============================== -->
+<!-- COMPILE-TIME FEATURES EXAMPLES -->
+<!-- ============================== -->
+<h1 id="compile-time-features-examples">Compile-Time Features Examples</h1>
+
+<!-- comptime Keyword -->
+<h2 id="comptime-keyword-examples">comptime Keyword</h2>
+
+<!-- Compile-Time Conditionals -->
+<h3 id="compile-time-conditionals-examples">Compile-Time Conditionals</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    comptime if (@compileErrorOption()) {
+        // ...
+    } else {
+        // ...
+    }
+}
+</code></pre>
+
+<!-- Compile-Time Loops -->
+<h3 id="compile-time-loops-examples">Compile-Time Loops</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    comptime var total = 0;
+    inline for (0..5) |i| {
+        total += i;
+    }
+    std.debug.print("Sum at compile-time: {d}\n", .{total});
+}
+</code></pre>
+
+<!-- Compile-Time Functions -->
+<h2 id="compile-time-functions-examples">Compile-Time Functions</h2>
+
+<!-- fn foo(comptime x: T) ... -->
+<h3 id="fn-foo-comptime-examples">fn foo(comptime x: T) ...</h3>
+<pre><code>const std = @import("std");
+
+fn compileTimeAdd(comptime a: i32, comptime b: i32) i32 {
+    return a + b;
+}
+
+pub fn main() void {
+    const result = compileTimeAdd(2, 3);
+    std.debug.print("Result = {d}\n", .{result});
+}
+</code></pre>
+
+<!-- Evaluating Functions at Compile Time -->
+<h3 id="evaluating-fn-compile-time-examples">Evaluating Functions at CT</h3>
+<pre><code>// The above is an example of evaluating at compile time
+</code></pre>
+
+<!-- Reflection & Metaprogramming -->
+<h2 id="reflection-metaprogramming-examples">Reflection &amp; Metaprogramming</h2>
+
+<!-- @typeInfo, @typeName, @field -->
+<h3 id="typeinfo-typename-field-examples">@typeInfo, @typeName, @field</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const info = @typeInfo(i32);
+    std.debug.print("{any}\n", .{info});
+}
+</code></pre>
+
+<!-- Generics / Parameterized Code -->
+<h3 id="generics-param-code-examples">Generics / Parameterized Code</h3>
+<pre><code>fn max(comptime T: type, a: T, b: T) T {
+    return if (a > b) a else b;
+}
+
+pub fn main() void {
+    const m = max(i32, 3, 7);
+}
+</code></pre>
+
+<!-- Inline Assembly -->
+<h2 id="inline-assembly-examples">Inline Assembly</h2>
+
+<!-- asm syntax -->
+<h3 id="asm-syntax-examples">Syntax &amp; instructions</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    @asm(.Inline, "// no-op", , .{});
+}
+</code></pre>
+
+<!-- asm safety & constraints -->
+<h3 id="asm-safety-constraints-examples">Safety &amp; Constraints</h3>
+<pre><code>// Simple example with constraints is more advanced usage
+</code></pre>
+
+<!-- ==================================== -->
+<!-- CONCURRENCY & ASYNCHRONOUS I/O EXAMPLES -->
+<!-- ==================================== -->
+<h1 id="concurrency-async-io-examples">Concurrency &amp; Async I/O Examples</h1>
+
+<!-- Async Functions -->
+<h2 id="async-functions-examples">Async Functions</h2>
+<!-- async fn basics -->
+<h3 id="async-fn-basics-examples">async fn basics</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var t = async childFn();
+    await t;
+}
+
+fn childFn() void {
+    std.debug.print("Running async!\n", .{});
+}
+</code></pre>
+
+<!-- await usage -->
+<h3 id="await-usage-examples">await usage</h3>
+<pre><code>// Shown above with await t
+</code></pre>
+
+<!-- Suspend & Resume -->
+<h2 id="suspend-resume-examples">Suspend &amp; Resume</h2>
+
+<!-- Cooperative Concurrency -->
+<h3 id="cooperative-concurrency-examples">Cooperative Concurrency</h3>
+<pre><code>// Typically used with async/await in Zig
+</code></pre>
+
+<!-- Event Loop Integration -->
+<h3 id="event-loop-integration-examples">Event Loop Integration</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var eloop = std.event.Loop.init(std.heap.page_allocator);
+    // ...
+}
+</code></pre>
+
+<!-- Channel & Queue Abstractions -->
+<h2 id="channel-queue-abstractions-examples">Channel &amp; Queue Abstractions</h2>
+
+<!-- Passing Data Between Tasks -->
+<h3 id="passing-data-between-tasks-examples">Passing Data Between Tasks</h3>
+<pre><code>// Hypothetical use: not in older Zig versions by default
+</code></pre>
+
+<!-- std.Channel -->
+<h3 id="std-channel-examples">std.Channel (if available)</h3>
+<pre><code>// Might need a specific Zig branch or version
+</code></pre>
+
+<!-- Async Network Operations -->
+<h2 id="async-network-operations-examples">Example: Asynchronous Network Operations</h2>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    // For instance, using std.net for asynchronous TCP
+}
+</code></pre>
+
+<!-- ================================= -->
+<!-- STANDARD LIBRARY ESSENTIALS EXAMPLES -->
+<!-- ================================= -->
+<h1 id="standard-library-essentials-examples">Standard Library Essentials Examples</h1>
+
+<!-- Overview of std -->
+<h2 id="overview-std-examples">Overview of std</h2>
+<!-- Modules & How to Import -->
+<h3 id="modules-and-imports-examples">Modules &amp; How to Import</h3>
+<pre><code>const std = @import("std");
+</code></pre>
+
+<!-- Common Modules -->
+<h2 id="common-modules-examples">Common Modules</h2>
+<!-- std.math -->
+<h3 id="std-math-examples">std.math</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const sqrt = std.math.sqrt(9.0);
+    std.debug.print("sqrt(9.0) = {}\n", .{sqrt});
+}
+</code></pre>
+
+<!-- std.fs -->
+<h3 id="std-fs-examples">std.fs</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    const file = try std.fs.cwd().openFile("test.txt", .{ .write = true });
+    defer file.close();
+    try file.write("Hello!");
+}
+</code></pre>
+
+<!-- std.mem -->
+<h3 id="std-mem-examples">std.mem</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const eq = std.mem.eql(u8, "abc", "abc");
+    // eq == true
+}
+</code></pre>
+
+<!-- std.testing -->
+<h3 id="std-testing-examples">std.testing</h3>
+<pre><code>test "my test" {
+    std.testing.expect(true);
+}
+</code></pre>
+
+<!-- std.time -->
+<h3 id="std-time-examples">std.time</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const start = std.time.timestamp();
+    // ...
+    const end = std.time.timestamp();
+    std.debug.print("Elapsed ns: {}\n", .{end - start});
+}
+</code></pre>
+
+<!-- Data Structures in std -->
+<h2 id="data-structures-std-examples">Data Structures in std</h2>
+
+<!-- ArrayList, ArrayHashMap, LinkedList, etc. -->
+<h3 id="arraylist-arrayhashmap-examples">ArrayList, ArrayHashMap, LinkedList, etc.</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var list = std.ArrayList(u8).init(std.heap.page_allocator);
+    defer list.deinit();
+    try list.append(42);
+}
+</code></pre>
+
+<!-- Usage & Memory Allocation -->
+<h3 id="usage-examples-allocation">Usage Examples &amp; Memory Allocation</h3>
+<pre><code>// Shown above with ArrayList initialization
+</code></pre>
+
+<!-- Utilities & Helpers -->
+<h2 id="utilities-helpers-examples">Utilities &amp; Helpers</h2>
+<!-- std.debug -->
+<h3 id="std-debug-examples">std.debug (logging, printing)</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    std.debug.print("Hello, Debug!\n", .{});
+}
+</code></pre>
+
+<!-- std.os -->
+<h3 id="std-os-examples">std.os (OS calls)</h3>
+<pre><code>// OS-specific calls, e.g. std.os.getEnvVar
+</code></pre>
+
+<!-- std.process -->
+<h3 id="std-process-examples">std.process (launching processes)</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() !void {
+    var child = try std.process.spawn(.{ .argv = &[_][]const u8{"echo", "Hi!", null} });
+    defer child.deinit();
+    const status = try child.wait();
+}
+</code></pre>
+
+<!-- ============================== -->
+<!-- INTERFACING WITH C/C++ EXAMPLES -->
+<!-- ============================== -->
+<h1 id="interfacing-c-cpp-examples">Interfacing with C/C++ Examples</h1>
+
+<!-- @cImport and @cInclude -->
+<h2 id="c-headers-ffi-examples">@cImport and @cInclude</h2>
+<!-- Linking system libraries -->
+<h3 id="linking-system-libraries-examples">Linking system libraries</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    @cImport({
+        @cInclude("math.h");
+    });
+}
+</code></pre>
+
+<!-- Calling Zig from C -->
+<h2 id="calling-zig-from-c-examples">Calling Zig from C</h2>
+<!-- Generating .h files with zig translate-c -->
+<h3 id="generating-header-files-translate-c-examples">Generating .h with zig translate-c</h3>
+<pre><code>// zig translate-c input.h > output.zig
+// Then reference output.zig in your code
+</code></pre>
+
+<!-- Mixed Projects -->
+<h2 id="mixed-projects-examples">Mixed Projects</h2>
+<!-- Organizing Zig + C/C++ code -->
+<h3 id="organizing-zig-c-cpp-code-examples">Organizing Zig + C/C++ code</h3>
+<pre><code>// Typically keep .c/.cpp and .zig in separate folders, link or compile with build.zig
+</code></pre>
+
+<!-- Build System Integration -->
+<h3 id="build-system-integration-examples">Build System Integration</h3>
+<pre><code>// Use build.zig to link .o files or .so/.a libraries
+</code></pre>
+
+<!-- ============================ -->
+<!-- TESTING & DEBUGGING EXAMPLES -->
+<!-- ============================ -->
+<h1 id="testing-debugging-examples">Testing &amp; Debugging Examples</h1>
+
+<!-- Test Declarations -->
+<h2 id="test-declarations-examples">Test Declarations</h2>
+<!-- test "description" {...} -->
+<h3 id="test-description-block-examples">test "description" { ... }</h3>
+<pre><code>test "example test" {
+    // Assertions here
+}
+</code></pre>
+
+<!-- Running Tests with zig test -->
+<h3 id="running-tests-zig-test-examples">Running Tests with zig test</h3>
+<pre><code>// zig test main.zig
+</code></pre>
+
+<!-- Test Organization -->
+<h2 id="test-organization-examples">Test Organization</h2>
+<!-- Multiple Test Files, Modules -->
+<h3 id="multiple-test-files-examples">Multiple Test Files, Modules</h3>
+<pre><code>const std = @import("std");
+// Put tests in multiple .zig files, run zig test on each or create build.zig
+</code></pre>
+
+<!-- Using std.testing Assertions -->
+<h3 id="std-testing-assertions-examples">Using std.testing Assertions</h3>
+<pre><code>test "myTest" {
+    std.testing.expect(1 + 1 == 2);
+}
+</code></pre>
+
+<!-- Debugging -->
+<h2 id="debugging-examples">Debugging</h2>
+
+<!-- Compiler Flags -->
+<h3 id="compiler-flags-examples">Compiler Flags (-femit-llvm-ir, etc.)</h3>
+<pre><code>// zig build-exe main.zig -femit-llvm-ir
+</code></pre>
+
+<!-- Using LLDB or GDB -->
+<h3 id="using-lldb-gdb-examples">Using LLDB or GDB</h3>
+<pre><code>// lldb ./main or gdb ./main
+</code></pre>
+
+<!-- Print Debugging (std.debug.print) -->
+<h3 id="print-debugging-stddebugprint-examples">Print Debugging (std.debug.print)</h3>
+<pre><code>std.debug.print("Debug info: x={}\n", .{x});
+</code></pre>
+
+<!-- ================================= -->
+<!-- DEPLOYMENT & DISTRIBUTION EXAMPLES -->
+<!-- ================================= -->
+<h1 id="deployment-distribution-examples">Deployment &amp; Distribution Examples</h1>
+
+<!-- Cross-Compilation in Depth -->
+<h2 id="cross-compilation-examples">Cross-Compilation in Depth</h2>
+<!-- Specifying --target -->
+<h3 id="specifying-target-examples">Specifying --target</h3>
+<pre><code>// zig build-exe main.zig --target=x86_64-windows-gnu
+</code></pre>
+
+<!-- Building Static vs. Shared Libraries -->
+<h3 id="building-static-shared-libs-examples">Building Static vs. Shared Libraries</h3>
+<pre><code>// addStaticLibrary vs. addSharedLibrary in build.zig
+</code></pre>
+
+<!-- Packaging for Multiple Platforms -->
+<h3 id="packaging-multiple-platforms-examples">Packaging for Multiple Platforms</h3>
+<pre><code>// Typically produce separate builds for each target
+</code></pre>
+
+<!-- Optimization Modes -->
+<h2 id="optimization-modes-examples">Optimization Modes</h2>
+<!-- Debug -->
+<h3 id="debug-opt-examples">Debug</h3>
+<pre><code>// zig build -Drelease=false
+</code></pre>
+
+<!-- ReleaseSafe -->
+<h3 id="releasesafe-opt-examples">ReleaseSafe</h3>
+<pre><code>// zig build -Drelease-safe
+</code></pre>
+
+<!-- ReleaseFast -->
+<h3 id="releasefast-opt-examples">ReleaseFast</h3>
+<pre><code>// zig build -Drelease-fast
+</code></pre>
+
+<!-- ReleaseSmall -->
+<h3 id="releasesmall-opt-examples">ReleaseSmall</h3>
+<pre><code>// zig build -Drelease-small
+</code></pre>
+
+<!-- Stripping Symbols & Minimizing Binary Size -->
+<h2 id="stripping-symbols-size-examples">Stripping Symbols &amp; Minimizing Binary Size</h2>
+<pre><code>// Use strip or -Drelease-small
+</code></pre>
+
+<!-- Reproducible Builds -->
+<h2 id="reproducible-builds-examples">Reproducible Builds</h2>
+<pre><code>// Zig tries to ensure reproducible builds by default
+</code></pre>
+
+<!-- ===================== -->
+<!-- ADVANCED TOPICS -->
+<!-- ===================== -->
+<h1 id="advanced-topics-examples">Advanced Topics Examples</h1>
+
+<!-- Using Zig as a Linker -->
+<h2 id="zig-as-linker-examples">Using Zig as a Linker</h2>
+<!-- zig cc, zig c++ commands -->
+<h3 id="zig-cc-zig-cpp-examples">zig cc, zig c++ commands</h3>
+<pre><code>// zig cc file.c -o prog
+</code></pre>
+
+<!-- Wrapping External Toolchains -->
+<h3 id="wrapping-external-toolchains-examples">Wrapping External Toolchains</h3>
+<pre><code>// Use zig as a drop-in for clang or gcc
+</code></pre>
+
+<!-- Generic Programming -->
+<h2 id="generic-programming-examples">Generic Programming</h2>
+<!-- Type Parameters -->
+<h3 id="type-parameters-examples">Type Parameters</h3>
+<pre><code>// Shown with fn max(comptime T: type, a: T, b: T)
+</code></pre>
+
+<!-- comptime techniques -->
+<h3 id="comptime-techniques-examples">comptime techniques</h3>
+<pre><code>// inline for loops, compile-time reflection, etc.
+</code></pre>
+
+<!-- Bit Manipulation -->
+<h2 id="bit-manipulation-examples">Bit Manipulation</h2>
+<!-- Packed Structs, Bitfields, Endianness -->
+<h3 id="packed-structs-bitfields-examples">Packed Structs, Bitfields, Endianness</h3>
+<pre><code>const std = @import("std");
+
+const Example = packed struct {
+    a: u4,
+    b: u4,
+};
+
+pub fn main() void {
+    var val = Example{ .a = 0xF, .b = 0x1 };
+}
+</code></pre>
+
+<!-- Inline Functions & Builtins -->
+<h2 id="inline-functions-builtins-examples">Inline Functions &amp; Builtins</h2>
+<!-- @import, @sizeOf, etc. -->
+<h3 id="builtin-functions-examples">@import, @sizeOf, @alignOf, @offsetof, etc.</h3>
+<pre><code>const std = @import("std");
+
+pub fn main() void {
+    const size = @sizeOf(i32);
+    std.debug.print("Size of i32 = {d}\n", .{size});
+}
+</code></pre>
+
+<!-- Performance Tuning -->
+<h2 id="performance-tuning-examples">Performance Tuning</h2>
+
+<!-- Measuring Performance -->
+<h3 id="measuring-performance-examples">Measuring Performance</h3>
+<pre><code>// std.benchmark or third-party tools
+</code></pre>
+
+<!-- Profiling Tools -->
+<h3 id="profiling-tools-examples">Profiling Tools</h3>
+<pre><code>// e.g. perf on Linux, Instruments on macOS
+</code></pre>
+
+<!-- Allocation Patterns -->
+<h3 id="allocation-patterns-examples">Allocation Patterns</h3>
+<pre><code>// Arena vs. general-purpose vs. slab
+</code></pre>
+
+<!-- ===================== -->
+<!-- TOOLING OVERVIEW -->
+<!-- ===================== -->
+<h1 id="tooling-overview-examples">Tooling Overview Examples</h1>
+
+<!-- zig fmt -->
+<h2 id="zig-fmt-examples">zig fmt (Formatter)</h2>
+<pre><code>// zig fmt file.zig
+</code></pre>
+
+<!-- zig translate-c -->
+<h2 id="zig-translate-c-examples">zig translate-c (C to Zig)</h2>
+<pre><code>// zig translate-c source.h > source.zig
+</code></pre>
+
+<!-- zig ast-check -->
+<h2 id="zig-ast-check-examples">zig ast-check (Syntax &amp; Semantic Checks)</h2>
+<pre><code>// zig ast-check file.zig
+</code></pre>
+
+<!-- zig targets -->
+<h2 id="zig-targets-examples">zig targets (List Supported Targets)</h2>
+<pre><code>// zig targets
+</code></pre>
+
+<!-- zig env -->
+<h2 id="zig-env-examples">zig env (Environment Info)</h2>
+<pre><code>// zig env
+</code></pre>
+
+<!-- BUILD EXAMPLES (10 total) -->
+<h2 id="zig-build-examples">zig build Examples</h2>
+<!-- (Insert the 10 build examples here, from the previous response) -->
+
+<h3 id="build-example-1-basic-usage">Build Example #1: Basic Usage</h3>
+<pre><code>// build.zig
+const std = @import("std");
+
+pub fn build(b: *std.build.Builder) void {
+    const mode = b.standardReleaseOptions();
+    const exe = b.addExecutable("example1", "src/main.zig");
+    exe.setBuildMode(mode);
+    exe.install();
+}
+</code></pre>
+
+<h3 id="build-example-2-build-executable">Build Example #2: Build Executable</h3>
+<pre><code>const std = @import("std");
+
+pub fn build(b: *std.build.Builder) void {
+    const mode = b.standardReleaseOptions();
+    const exe = b.addExecutable("myapp", "src/main.zig");
+    exe.setBuildMode(mode);
+    exe.install();
+}
+</code></pre>
+
+<h3 id="build-example-3-build-library">Build Example #3: Build Library</h3>
+<pre><code>const std = @import("std");
+
+pub fn build(b: *std.build.Builder) void {
+    const mode = b.standardReleaseOptions();
+    const lib = b.addStaticLibrary("mylib", "src/lib.zig");
+    lib.setBuildMode(mode);
+    lib.install();
+}
+</code></pre>
+
+<h3 id="build-example-4-custom-build-steps">Build Example #4: Custom Build Steps</h3>
+<pre><code>const std = @import("std");
+
+pub fn build(b: *std.build.Builder) void {
+    const exe = b.addExecutable("custom-steps", "src/main.zig");
+    const step = b.addCommand("echo", &[_][]const u8{"Running custom command!"});
+    exe.step.addDependency(&step.step);
+    exe.install();
+}
+</code></pre>
+
+<h3 id="build-example-5-link-system-libraries">Build Example #5: Link System Libraries</h3>
+<pre><code>const std = @import("std");
+
+pub fn build(b: *std.build.Builder) void {
+    const exe = b.addExecutable("math-app", "src/main.zig");
+    exe.linkSystemLibrary("m"); // link the math library (Linux)
+    exe.install();
+}
+</code></pre>
+
+<h3 id="build-example-6-set-target">Build Example #6: Set Target (Cross-Compile)</h3>
+<pre><code>const std = @import("std");
+
+pub fn build(b: *std.build.Builder) void {
+    const target = std.zig.CrossTarget{
+        .cpu_arch = .x86_64,
+        .os_tag = .windows,
+        .abi = .gnu,
+    };
+    const exe = b.addExecutable("cross-app", "src/main.zig");
+    exe.setTarget(target);
+    exe.install();
+}
+</code></pre>
+
+<h3 id="build-example-7-set-build-mode">Build Example #7: Set Build Mode</h3>
+<pre><code>const std = @import("std");
+
+pub fn build(b: *std.build.Builder) void {
+    const exe = b.addExecutable("release-app", "src/main.zig");
+    exe.setBuildMode(.ReleaseSmall);
+    exe.install();
+}
+</code></pre>
+
+<h3 id="build-example-8-run-tests">Build Example #8: Run Tests</h3>
+<pre><code>const std = @import("std");
+
+pub fn build(b: *std.build.Builder) void {
+    const test_step = b.addTest("src/main.zig");
+    b.default_step.dependOn(&test_step.step);
+}
+</code></pre>
+
+<h3 id="build-example-9-install-artifacts">Build Example #9: Install Artifacts</h3>
+<pre><code>const std = @import("std");
+
+pub fn build(b: *std.build.Builder) void {
+    const exe = b.addExecutable("myapp", "src/main.zig");
+    exe.install();
+    const install_step = b.addInstallStep(exe);
+    install_step.setTargetDir("deploy/bin");
+}
+</code></pre>
+
+<h3 id="build-example-10-overriding-std-special-strings">Build Example #10: Overriding std Special Strings</h3>
+<pre><code>const std = @import("std");
+
+pub fn build(b: *std.build.Builder) void {
+    b.overrideStdSpecialStrings("my_docs.zig", "my_tests.zig");
+    const exe = b.addExecutable("overridden-std", "src/main.zig");
+    exe.install();
+}
+</code></pre>
+
+
+  <!-- ########################################################## -->
+  <!-- end of "main content" area. -->
+  <!-- ########################################################## -->
+
+</div><!-- end #main -->
+
+
+<script src="examples_script.js"></script>
+</body>
+</html>
+
